@@ -67,7 +67,7 @@ class Help(commands.Cog):
         prefix = server_prefix[0] if server_prefix else "&"
         view = MenuView(ctx.author)
         embed = discord.Embed(colour=0x2b2d31, description=f"{dot} My prefix for this server is `{prefix}`\n{dot} Total Commands {len(self.bot.commands)}\n{dot} [**Fluffy**]({Fluffy.bot_link}) | [**Support**]({Fluffy.support_link})\n{dot} Thanks for using Fluffy")
-        embed.add_field(name="__Commands__", value=f"**{antinuke}`:`Antinuke\n{autoresp}`:`Autoresponder\n{moderation}`:`Moderation\n{utility}`:`Utility\n{music}`:`Music\n{filters}`:`Filters\n{info}`:`Info**")
+        embed.add_field(name="__Commands__", value=f"{utility}`:`Utility\n{music}`:`Music\n{filters}`:`Filters\n{info}`:`Info**")
         embed.set_author(name=ctx.author.name, icon_url=ctx.author.display_avatar.url)
         embed.set_thumbnail(url=ctx.author.display_avatar.url)
         embed.set_footer(text="Powered By Fluffy Services", icon_url=Fluffy.icon)

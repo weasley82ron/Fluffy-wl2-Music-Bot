@@ -184,8 +184,8 @@ class music(commands.Cog):
             embed4 = discord.Embed(description="I am not playing anything.",colour=0x2b2d31)
             await ctx.reply(embed=embed4, mention_author=False)
             return 
-        if not 0 <= volume <= 150:
-            embed5 = discord.Embed(description="Please provide a volume to set in between 0 to 150.",colour=0x2b2d31)
+        if not 0 <= volume <= 200:
+            embed5 = discord.Embed(description="Please provide a volume to set in between 0 to 200.",colour=0x2b2d31)
             await ctx.reply(embed=embed5, mention_author=False)
             return        
         await vc.set_volume(volume)

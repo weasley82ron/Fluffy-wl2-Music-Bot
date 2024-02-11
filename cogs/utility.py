@@ -136,7 +136,7 @@ class Utility(commands.Cog):
 
 
     @commands.command()
-    async def afk(self, ctx, *, reason="Am I AFK?"):
+    async def afk(self, ctx, *, reason="**Am I AFK?**"):
         member = ctx.author
         if member.id in afks.keys():
             afks.pop(member.id)

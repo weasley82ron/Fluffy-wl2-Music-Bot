@@ -80,7 +80,7 @@ async def on_shard_ready(shard_id):
 @client.event                      
 async def on_ready():
   await client.load_extension("jishaku")
-  client.owner_ids = [1195047642774896640, 1177262245034606647, 1084300159082573824, 1143469898077569104, 1120682121942552636]
+  client.owner_ids = [1177262245034606647, 1204853057742049370]
   client.loop.create_task(node_connect())
   print(f"Connected as {client.user}")
 
@@ -89,7 +89,7 @@ async def on_ready():
 @client.event
 async def node_connect():
   await client.wait_until_ready()
-  node: wavelink.Node = wavelink.Node(uri='lavalink1.albinhakanson.se:1141', password='albinhakanson.se', secure=False)
+  node: wavelink.Node = wavelink.Node(uri='lavalink.ncop.tech:55591', password='ambaniop', secure=False)
   sc: spotify.SpotifyClient = spotify.SpotifyClient(
       client_id='e7c9c292bbc24745b33743348e560d96',
       client_secret='4726d6d6eba34cfe889c26844fcabc97'

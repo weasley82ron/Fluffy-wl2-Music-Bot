@@ -94,13 +94,10 @@ class info(commands.Cog):
         latency = round(self.client.latency * 1000)
 
         embed = discord.Embed(
-            title="Ping",
-            description=f"{latency}ms",
             color=0x2b2d31
         )
-        embed.set_author(name=ctx.author.name, icon_url=ctx.author.display_avatar.url)
-        embed.set_thumbnail(url=ctx.author.display_avatar.url)
-        embed.set_footer(text="Powered By Fluffy Services", icon_url=Fluffy.icon)
+        embed.set_author(name=f"{latency}ms Pong! ", icon_url=ctx.author.display_avatar.url)
+        embed.set_footer(text="Fluffy Services", icon_url=Fluffy.icon)
         await ctx.reply(embed=embed, mention_author=False)
 
     @commands.command()

@@ -6,5 +6,3 @@ bot_link = "https://discord.com/api/oauth2/authorize?client_id=11971675043767256
 support_link = "https://discord.gg/UrxJz6xfZT"
 color=0x2b2d31
 bypass_ids=[1195047642774896640, 1177262245034606647]
-autoresp_image="https://cdn.discordapp.com/attachments/1197078320794304532/1200032482645528596/standard.gif?ex=65c4b457&is=65b23f57&hm=70df215a6efe06215ea35dbdc932671e3db0ab8ba21df50f27f803a0f8ededf5&"
-help_image="https://cdn.discordapp.com/attachments/1197078320794304532/1199940106577006652/standard.gif?ex=65c45e4f&is=65b1e94f&hm=5a241a12e5c45db64604340a6e4e1effaa4c7ea124304e8b4f453a8d928851b5&"

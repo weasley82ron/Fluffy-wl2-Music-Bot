@@ -14,8 +14,8 @@ class MenuView(discord.ui.View):
         self.cur = self.con.cursor()        
 
     @discord.ui.select(placeholder="Fluffy Dev", options=[
-        discord.SelectOption(label="Utility", value="utility"),
         discord.SelectOption(label="Music", value="music"),
+        discord.SelectOption(label="Utility", value="utility"),
         discord.SelectOption(label="Filter", value="filter"),
         discord.SelectOption(label="Info", value="info"),
         ])
@@ -25,14 +25,14 @@ class MenuView(discord.ui.View):
                 await interaction.response.send_message("Sorry Bro, This is not your interaction.", ephemeral=True)
                 return
             selected_values = select.values
-            if selected_values and "utility" in selected_values:
-                embed = discord.Embed(colour=0x2b2d31, description="`Avatar`, `Banner`, `MemberCount`")
-                embed.set_author(name="Utility Commands", icon_url=Fluffy.icon)
-                await interaction.response.edit_message(embed=embed, view=self)                
-            elif selected_values and "music" in selected_values:
+            if selected_values and "music" in selected_values:
                 embed = discord.Embed(colour=0x2b2d31, description="`Play`, `Pause`, `Resume`, `Stop`, `Queue`, `Volume`, `Skip`, `ClearQueue`, `DefaultVolume`, `Move`, `Join`, `Leave`, `NowPlaying`, `Forward`, `Rewind`, `Seek`, `Remove`")
                 embed.set_author(name="Music Commands", icon_url=Fluffy.icon)
                 await interaction.response.edit_message(embed=embed, view=self)
+            elif selected_values and "utility" in selected_values:
+                embed = discord.Embed(colour=0x2b2d31, description="`Avatar`, `Banner`, `MemberCount`")
+                embed.set_author(name="Utility Commands", icon_url=Fluffy.icon)
+                await interaction.response.edit_message(embed=embed, view=self)                
             elif selected_values and "filter" in selected_values:
                 embed = discord.Embed(colour=0x2b2d31, description="`Vaporwave`, `Lofi`, `8d`, `Slowmo`, `BassBoost`, `China`, `Chipmunk`, `DarthVader`, `Demon`, `Funny`, `Karoke`, `NightCore`, `Pop`, `Soft`, `TrebleBass`, `Tremolo`, `Alien`, `Reset`")
                 embed.set_author(name="Filter Commands", icon_url=Fluffy.icon)
@@ -66,11 +66,11 @@ class Help(commands.Cog):
         server_prefix = cur.fetchone()
         prefix = server_prefix[0] if server_prefix else "&"
         view = MenuView(ctx.author)
-        embed = discord.Embed(colour=0x2b2d31, description=f"{dot} My prefix for this server is `{prefix}`\n{dot} Total Commands {len(self.bot.commands)}\n{dot} [**Fluffy**]({Fluffy.bot_link}) | [**Support**]({Fluffy.support_link})\n{dot} Thanks for using Fluffy")
-        embed.add_field(name="__Commands__", value=f"{utility}`:`Utility\n{music}`:`Music\n{filters}`:`Filters\n{info}`:`Info**")
+        embed = discord.Embed(colour=0x2b2d31, description=f"{dot} My prefix for this server is `{prefix}`\n{dot} Total Commands `70`\n{dot} [**Fluffy**]({Fluffy.bot_link}) | [**Support**]({Fluffy.support_link})\n{dot} Thanks for using Fluffy")
+        embed.add_field(name="__Commands__", value=f"**{music}`:`Music\n{utility}`:`Utility\n{filters}`:`Filters\n{info}`:`Info**")
         embed.set_author(name=ctx.author.name, icon_url=ctx.author.display_avatar.url)
         embed.set_thumbnail(url=ctx.author.display_avatar.url)
-        embed.set_footer(text="Powered By Fluffy Services", icon_url=Fluffy.icon)
+        embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
         message = await ctx.reply(embed=embed, view=view, mention_author=False)
         try:
             await asyncio.sleep(view.timeout)

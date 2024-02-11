@@ -68,7 +68,6 @@ async def setup_hook():
   cur.execute("CREATE TABLE IF NOT EXISTS ignored_channels (guild_id INTEGER, channel_id INTEGER, PRIMARY KEY (guild_id, channel_id))")
   cur.execute("CREATE TABLE IF NOT EXISTS blacklist (user_id INTEGER PRIMARY KEY)")
   cur.execute("CREATE TABLE IF NOT EXISTS Owner (user_id INTEGER PRIMARY KEY)") 
-  cur.execute("CREATE TABLE IF NOT EXISTS Autoresponder(guild_id INTEGER PRIMARY KEY)") 
   print("Table Initated")
 
 @client.event
@@ -89,7 +88,7 @@ async def on_ready():
 @client.event
 async def node_connect():
   await client.wait_until_ready()
-  node: wavelink.Node = wavelink.Node(uri='lavalink.ncop.tech:55591', password='ambaniop', secure=False)
+  node: wavelink.Node = wavelink.Node(uri='lavalink1.albinhakanson.se:1141', password='albinhakanson.se', secure=False)
   sc: spotify.SpotifyClient = spotify.SpotifyClient(
       client_id='e7c9c292bbc24745b33743348e560d96',
       client_secret='4726d6d6eba34cfe889c26844fcabc97'

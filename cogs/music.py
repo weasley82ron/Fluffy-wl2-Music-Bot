@@ -3,6 +3,7 @@ import wavelink , asyncio
 from collections import deque
 import re
 from discord.ext import commands
+import Fluffy
 
 class music(commands.Cog):
     def __init__(self, client):
@@ -50,7 +51,7 @@ class music(commands.Cog):
                     embed6 = discord.Embed(description="More songs cannot be added to the queue.",colour=0x2b2d31)
                     return await ctx.reply(embed=embed6, mention_author=False) 
                 await vc.queue.put_wait(track)
-                embed7 = discord.Embed(description=f"Added **{track.title}** to the queue.",colour=0x2b2d31)
+                embed7 = discord.Embed(description=f"Added **[{track.title}]({Fluffy.support_link})** to the queue.",colour=0x2b2d31)
                 await ctx.reply(embed=embed7, mention_author=False)
 
     @commands.Cog.listener('on_wavelink_track_end')
@@ -71,7 +72,7 @@ class music(commands.Cog):
         hours, remainder = divmod(length_seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
         duration_str = f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
-        embed = discord.Embed(description=f"Started Playing [{track.title}]・[{duration_str}]", colour=0x2b2d31)
+        embed = discord.Embed(description=f"Started Playing [{track.title}]({Fluffy.support_link})・[{duration_str}]({Fluffy.support_link})", colour=0x2b2d31)
         msg = await player.ctx.reply(embed=embed, mention_author=False)
         player.ctx.msg = msg
 
@@ -163,7 +164,7 @@ class music(commands.Cog):
         hours, remainder = divmod(length_seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
         duration_str = f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
-        embed5 = discord.Embed(description=f'**__Now Playing__**\n {vc.current.title}・[{duration_str}]\n\n```\n{track_list}```',color=0x2b2d31)
+        embed5 = discord.Embed(description=f'**__Now Playing__**\n  [{vc.current.title}]({Fluffy.support_link})・[{duration_str}]({Fluffy.support_link})\n\n```\n{track_list}```',color=0x2b2d31)
         await ctx.reply(embed=embed5, mention_author=False)
 
     @commands.command(aliases=['vol'])
@@ -214,7 +215,7 @@ class music(commands.Cog):
         if list(vc.queue) != []:
             track = vc.queue.get()
             await vc.play(track)
-            embed6 = discord.Embed(description=f"Started playing: {track.title}",colour=0x2b2d31)
+            embed6 = discord.Embed(description=f"Started playing: [{track.title}]({Fluffy.support_link})",colour=0x2b2d31)
             await ctx.reply(embed=embed6, mention_author=False)
 
     @commands.command(aliases=['cq'])
@@ -274,7 +275,7 @@ class music(commands.Cog):
                 await ctx.reply(embed=embed3, mention_author=False)  
         else:
             vc: wavelink.Player = await ctx.author.voice.channel.connect(cls=wavelink.Player, self_deaf=True)
-            embed4 = discord.Embed(description=f"Successfully Joined voice channel: {ctx.author.voice.channel.name}", colour=0x2b2d31)
+            embed4 = discord.Embed(description=f"Successfully Joined your voice channel" , colour=0x2b2d31)
             return await ctx.reply(embed=embed4, mention_author=False)      
             
     @commands.command()
@@ -342,7 +343,7 @@ class music(commands.Cog):
         minutes, seconds = divmod(remainder, 60)
         duration_str = f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
         embed6 = discord.Embed(title= "Now Playing", color=self.color)
-        embed6.description=f"'[{vc.current.title}](Fluffy.support_link)・`[{duration_str}]`'"
+        embed6.description=f"' [{vc.current.title}]({Fluffy.support_link})・[{duration_str}]({Fluffy.support_link})`'"
         await ctx.reply(embed=embed6, mention_author=False)
         
     @commands.command()
@@ -449,7 +450,7 @@ class music(commands.Cog):
             return await ctx.reply(embed=embed6, mention_author=False)             
         removed = list(vc.queue).pop(index - 1)
         vc.queue = list(vc.queue)[:index - 1] + list(vc.queue)[index:]
-        embed7 = discord.Embed(description=f"Successfully removed `{removed.title}` from Queue.", color=0x2b2d31)    
+        embed7 = discord.Embed(description=f"Successfully removed `[{removed.title}]({Fluffy.support_link})` from Queue.", color=0x2b2d31)    
         await ctx.reply(embed=embed7, mention_author=False)
 
 async def setup(client):

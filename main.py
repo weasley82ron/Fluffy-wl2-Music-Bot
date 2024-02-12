@@ -125,7 +125,7 @@ async def main():
     await client.start("MTIwNjUzNzExOTQ3MjgxNjI0OQ.GnA75W.lVHq2s3HgFU01-D9VBdTu58hG0x1NAeRizKS5Y")
 
 
-#made by lulla
+#Made By Thierry
 
 
 

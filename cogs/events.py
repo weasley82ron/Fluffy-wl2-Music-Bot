@@ -13,7 +13,7 @@ class events(commands.Cog):
         
     @commands.Cog.listener("on_guild_join")
     async def on_guild_join(self, guild: discord.Guild):
-        if guild.member_count < 70:
+        if guild.member_count < 100:
             await guild.leave()
         else:
             async with aiohttp.ClientSession() as session:

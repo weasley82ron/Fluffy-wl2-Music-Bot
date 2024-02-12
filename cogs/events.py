@@ -6,6 +6,7 @@ import Fluffy
 class events(commands.Cog):
     def __init__(self, client):
         self.client = client  
+        self.color = Fluffy.color
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -18,14 +19,14 @@ class events(commands.Cog):
         else:
             async with aiohttp.ClientSession() as session:
                 webhook = discord.Webhook.from_url(url=Fluffy.guild_join,session=session)
-                embed = discord.Embed(title="Joined A Guild", description=f"**ID:** {guild.id}\n**Name:** {guild.name}\n**MemberCount:** {len(guild.members)}\n**Created:** <t:{int(guild.created_at.timestamp())}:R>", color=0x2b2d31)    
+                embed = discord.Embed(title="Joined A Guild", description=f"**ID:** {guild.id}\n**Name:** {guild.name}\n**MemberCount:** {len(guild.members)}\n**Created:** <t:{int(guild.created_at.timestamp())}:R>", color=self.color)    
                 await webhook.send(embed=embed)       
             
     @commands.Cog.listener("on_guild_remove")
     async def on_guild_remove(self, guild: discord.Guild):
             async with aiohttp.ClientSession() as session:
                 webhook = discord.Webhook.from_url(url=Fluffy.guild_leave,session=session)
-                embed = discord.Embed(title="Left A Guild", description=f"**ID:** {guild.id}\n**Name:** {guild.name}\n**MemberCount:** {len(guild.members)}\n**Created:** <t:{int(guild.created_at.timestamp())}:R>", color=0x2b2d31)
+                embed = discord.Embed(title="Left A Guild", description=f"**ID:** {guild.id}\n**Name:** {guild.name}\n**MemberCount:** {len(guild.members)}\n**Created:** <t:{int(guild.created_at.timestamp())}:R>", color=self.color)
                 await webhook.send(embed=embed)       
 
 

@@ -1,11 +1,12 @@
 import discord
 from discord.ext import commands
 import wavelink
-
+import Fluffy
 class Filters(commands.Cog):
     def __init__(self, client):
         self.client = client
         self.filters = {}
+        self.color = Fluffy.color
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -29,47 +30,47 @@ class Filters(commands.Cog):
     async def apply_filter(self, ctx, filter_name, filter_settings):
         vc: wavelink.Player = ctx.voice_client
         if not ctx.voice_client:
-            embed1 = discord.Embed(description="I am not in any voice channel.", colour=0x2b2d31)
+            embed1 = discord.Embed(description="I am not in any voice channel.", colour=self.color)
             return await ctx.reply(embed=embed1, mention_author=False)     
         elif not getattr(ctx.author.voice, "channel", None):
-            embed2 = discord.Embed(description="You are not in a voice channel.",colour=0x2b2d31)
+            embed2 = discord.Embed(description="You are not in a voice channel.",colour=self.color)
             return await ctx.reply(embed=embed2, mention_author=False)      
         if ctx.author.voice.channel != ctx.voice_client.channel:
-            embed3 = discord.Embed(description="You are not in the same voice channel.", colour=0x2b2d31)
+            embed3 = discord.Embed(description="You are not in the same voice channel.", colour=self.color)
             return await ctx.reply(embed=embed3, mention_author=False)
         if not vc.is_playing():
-            embed4 = discord.Embed(description="I am not playing anything.",colour=0x2b2d31)
+            embed4 = discord.Embed(description="I am not playing anything.",colour=self.color)
             return await ctx.reply(embed=embed4, mention_author=False) 
         if vc.is_paused():
-            embed6 = discord.Embed(description="I am currently paused please use `?resume`.",colour=0x2b2d31)
+            embed6 = discord.Embed(description="I am currently paused please use `?resume`.",colour=self.color)
             return await ctx.reply(embed=embed6, mention_author=False)  
         flt = await self.get_filter(filter_name, ctx.guild.id)
         if not flt:
             await vc.set_filter(filter_settings)
             await self._filter(filter_name, ctx.guild.id)
-            embed7 = discord.Embed(description=f"Set **{filter_name.capitalize()}** filter to the player.", color=0x2b2d31)
+            embed7 = discord.Embed(description=f"Set **{filter_name.capitalize()}** filter to the player.", color=self.color)
             await ctx.reply(embed=embed7, mention_author=False)
         else:
             await vc.set_filter(wavelink.Filter())
             await self._filter(filter_name, ctx.guild.id)
-            embed8 = discord.Embed(description=f"Removed **{filter_name.capitalize()}** filter from the player.", color=0x2b2d31)
+            embed8 = discord.Embed(description=f"Removed **{filter_name.capitalize()}** filter from the player.", color=self.color)
             await ctx.reply(embed=embed8, mention_author=False)  
     async def reset_filters(self, ctx, filter_names):
         vc: wavelink.Player = ctx.voice_client
         if not ctx.voice_client:
-            embed = discord.Embed(description="I am not in any voice channel.", colour=0x2b2d31)
+            embed = discord.Embed(description="I am not in any voice channel.", colour=self.color)
             return await ctx.reply(embed=embed, mention_author=False)      
         elif not getattr(ctx.author.voice, "channel", None):
-            embed2 = discord.Embed(description="You are not in a voice channel.",colour=0x2b2d31)
+            embed2 = discord.Embed(description="You are not in a voice channel.",colour=self.color)
             return await ctx.reply(embed=embed2, mention_author=False)      
         if ctx.author.voice.channel != ctx.voice_client.channel:
-            embed3 = discord.Embed(description="You are not in the same voice channel.", colour=0x2b2d31)
+            embed3 = discord.Embed(description="You are not in the same voice channel.", colour=self.color)
             return await ctx.reply(embed=embed3, mention_author=False)
         if not vc.is_playing():
-            embed4 = discord.Embed(description="I am not playing anything.",colour=0x2b2d31)
+            embed4 = discord.Embed(description="I am not playing anything.",colour=self.color)
             return await ctx.reply(embed=embed4, mention_author=False)     
         if vc.is_paused():
-            embed5 = discord.Embed(description="I am currently paused please use `?resume`.",colour=0x2b2d31)
+            embed5 = discord.Embed(description="I am currently paused please use `?resume`.",colour=self.color)
             return await ctx.reply(embed=embed5, mention_author=False)
         for filter_name in filter_names:
             flt = await self.get_filter(filter_name, ctx.guild.id)
@@ -83,7 +84,7 @@ class Filters(commands.Cog):
                 else:
                     await vc.set_filter(wavelink.Filter())      
                 await self._filter(filter_name, ctx.guild.id)
-        embed6 = discord.Embed(description=f"All the filters have been reset.", color=0x2b2d31)
+        embed6 = discord.Embed(description=f"All the filters have been reset.", color=self.color)
         await ctx.reply(embed=embed6, mention_author=False)
 
     @commands.command()

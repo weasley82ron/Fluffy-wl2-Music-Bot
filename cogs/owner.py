@@ -21,6 +21,7 @@ class owner(commands.Cog):
         self.client = client
         self.con = sqlite3.connect('database.db')
         self.cur = self.con.cursor()
+        self.color = Fluffy.color
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -40,11 +41,11 @@ class owner(commands.Cog):
         if re != []:
             ids = [int(i[0]) for i in re]
             if user.id in ids:
-                embed = discord.Embed(description=f"That user is already in owner list.", color=0x2b2d31)
+                embed = discord.Embed(description=f"That user is already in owner list.", color=self.color)
                 await ctx.reply(embed=embed, mention_author=False)
                 return
         c.execute("INSERT INTO Owner(user_id) VALUES(?)", (user.id,))
-        embed = discord.Embed(description=f"Successfully added **{user}** in owner list.", color=0x2b2d31)
+        embed = discord.Embed(description=f"Successfully added **{user}** in owner list.", color=self.color)
         await ctx.reply(embed=embed, mention_author=False)
         self.con.commit()
 
@@ -55,16 +56,16 @@ class owner(commands.Cog):
         c.execute("SELECT user_id FROM Owner")
         re = c.fetchall()
         if re == []:
-            embed = discord.Embed(description=f"That user is not in owner list.", color=0x2b2d31)
+            embed = discord.Embed(description=f"That user is not in owner list.", color=self.color)
             await ctx.reply(embed=embed, mention_author=False)
             return
         ids = [int(i[0]) for i in re]
         if user.id not in ids:
-            embed = discord.Embed(description=f"That user is not in owner list.", color=0x2b2d31)
+            embed = discord.Embed(description=f"That user is not in owner list.", color=self.color)
             await ctx.reply(embed=embed, mention_author=False)
             return
         c.execute("DELETE FROM Owner WHERE user_id = ?", (user.id,))
-        embed = discord.Embed(description=f"Successfully removed **{user}** from owner list.", color=0x2b2d31)
+        embed = discord.Embed(description=f"Successfully removed **{user}** from owner list.", color=self.color)
         await ctx.reply(embed=embed, mention_author=False)
         self.con.commit() 
 
@@ -81,14 +82,14 @@ class owner(commands.Cog):
         result = cursor.fetchall()
         if user.id not in [int(i[0]) for i in result]:
             cursor.execute(f"INSERT INTO Np(users) VALUES(?)", (user.id,))
-            embed = discord.Embed(description=f"Successfully added **{user}** to no prefix.", color=0x2b2d31)
+            embed = discord.Embed(description=f"Successfully added **{user}** to no prefix.", color=self.color)
             await ctx.reply(embed=embed, mention_author=False)
             async with aiohttp.ClientSession() as session:
                 webhook = discord.Webhook.from_url(url=Fluffy.np_bl_hook, session=session)
-                embed = discord.Embed(title="No Prefix Added", description=f"**Action By:** {ctx.author} ({ctx.author.id})\n**User:** {user} ({user.id})",color=0x2b2d31)
+                embed = discord.Embed(title="No Prefix Added", description=f"**Action By:** {ctx.author} ({ctx.author.id})\n**User:** {user} ({user.id})",color=self.color)
                 await webhook.send(embed=embed)
         else:
-            embed = discord.Embed(description=f"That user is already in no prefix.", color=0x2b2d31)
+            embed = discord.Embed(description=f"That user is already in no prefix.", color=self.color)
             await ctx.reply(embed=embed, mention_author=False)
         self.con.commit()
 
@@ -100,14 +101,14 @@ class owner(commands.Cog):
         result = cursor.fetchall()
         if user.id in [int(i[0]) for i in result]:
             cursor.execute(f"DELETE FROM Np WHERE users = ?", (user.id,))
-            embed = discord.Embed(description=f"Successfully removed **{user}** from no prefix.", color=0x2b2d31)
+            embed = discord.Embed(description=f"Successfully removed **{user}** from no prefix.", color=self.color)
             await ctx.reply(embed=embed, mention_author=False)
             async with aiohttp.ClientSession() as session:
                 webhook = discord.Webhook.from_url(url=Fluffy.np_bl_hook,session=session)
-                embed = discord.Embed(title="Noprefix Removed", description=f"**Action By:** {ctx.author} ({ctx.author.id})\n**User:** {user} ({user.id})",color=0x2b2d31)
+                embed = discord.Embed(title="Noprefix Removed", description=f"**Action By:** {ctx.author} ({ctx.author.id})\n**User:** {user} ({user.id})",color=self.color)
                 await webhook.send(embed=embed)  
         else:
-            embed = discord.Embed(description=f"That user isn't in no prefix.", color=0x2b2d31)
+            embed = discord.Embed(description=f"That user isn't in no prefix.", color=self.color)
             await ctx.reply(embed=embed, mention_author=False)
         self.con.commit()
 
@@ -122,16 +123,16 @@ class owner(commands.Cog):
         self.cur.execute('SELECT * FROM blacklist WHERE user_id = ?', (user.id,))
         blacklisted = self.cur.fetchone()    
         if blacklisted:
-            embed = discord.Embed(description=f"**{user.name}** Is already in blacklist.", color=0x2b2d31)
+            embed = discord.Embed(description=f"**{user.name}** Is already in blacklist.", color=self.color)
             await ctx.reply(embed=embed, mention_author=False)
         else:
             self.cur.execute('INSERT INTO blacklist (user_id) VALUES (?)', (user.id,))
             self.con.commit()
-            embed = discord.Embed(description=f"I will now ignore messages from **{user.name}**", color=0x2b2d31)
+            embed = discord.Embed(description=f"I will now ignore messages from **{user.name}**", color=self.color)
             await ctx.reply(embed=embed, mention_author=False)
             async with aiohttp.ClientSession() as session:
                 webhook = discord.Webhook.from_url(url=Fluffy.np_bl_hook,session=session)
-                embed = discord.Embed(title="Blacklist Added", description=f"**Action By:** {ctx.author} ({ctx.author.id})\n**User:** {user} ({user.id})",color=0x2b2d31)
+                embed = discord.Embed(title="Blacklist Added", description=f"**Action By:** {ctx.author} ({ctx.author.id})\n**User:** {user} ({user.id})",color=self.color)
                 await webhook.send(embed=embed)  
 
     @bl.command(name="remove")
@@ -142,14 +143,14 @@ class owner(commands.Cog):
         if blacklisted:
             self.cur.execute('DELETE FROM blacklist WHERE user_id = ?', (user.id,))
             self.con.commit()        
-            embed = discord.Embed(description=f"I will no longer ignore messages from **{user.name}**", color=0x2b2d31)
+            embed = discord.Embed(description=f"I will no longer ignore messages from **{user.name}**", color=self.color)
             await ctx.reply(embed=embed, mention_author=False)
             async with aiohttp.ClientSession() as session:
                 webhook = discord.Webhook.from_url(url=Fluffy.np_bl_hook,session=session)
-                embed = discord.Embed(title="Blacklist Removed", description=f"**Action By:** {ctx.author} ({ctx.author.id})\n**User:** {user} ({user.id})",color=0x2b2d31)
+                embed = discord.Embed(title="Blacklist Removed", description=f"**Action By:** {ctx.author} ({ctx.author.id})\n**User:** {user} ({user.id})",color=self.color)
                 await webhook.send(embed=embed)          
         else:
-            embed = discord.Embed(description=f"**{user.name}** is not in the blacklist.", color=0x2b2d31)
+            embed = discord.Embed(description=f"**{user.name}** is not in the blacklist.", color=self.color)
             await ctx.reply(embed=embed, mention_author=False)
 
     @commands.command()
@@ -165,15 +166,15 @@ class owner(commands.Cog):
         cursor.execute("SELECT prefix FROM Prefix WHERE guild_id = ?", (ctx.guild.id,))
         p = cursor.fetchone()  
         if prefix is None:
-            embed = discord.Embed(description=f"Please provide a prefix to update.",color=0x2b2d31)
+            embed = discord.Embed(description=f"Please provide a prefix to update.",color=self.color)
             await ctx.reply(embed=embed, mention_author=False)
             return     
         if len(prefix) > 2:
-            embed = discord.Embed(description="Prefix cannot be greater than 2 characters.",color=0x2b2d31)
+            embed = discord.Embed(description="Prefix cannot be greater than 2 characters.",color=self.color)
             await ctx.reply(embed=embed, mention_author=False)
             return      
         cursor.execute(f"UPDATE Prefix SET prefix = ? WHERE guild_id = ?", (prefix, ctx.guild.id))
-        embed = discord.Embed(description=f"Successfully set the prefix to `{prefix}`",color=0x2b2d31)
+        embed = discord.Embed(description=f"Successfully set the prefix to `{prefix}`",color=self.color)
         await ctx.reply(embed=embed, mention_author=False)
         self.con.commit()
 

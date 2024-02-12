@@ -118,7 +118,7 @@ class Utility(commands.Cog):
                        icon_url=member.avatar.url
                        if member.avatar else member.default_avatar.url)
       embed.set_image(url=bannerUser.banner)
-      embed.set_footer(text=f"**Requested By** {ctx.author}",
+      embed.set_footer(text=f"Requested By {ctx.author}",
                        icon_url=ctx.author.avatar.url
                        if ctx.author.avatar else ctx.author.default_avatar.url)
 

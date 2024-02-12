@@ -29,6 +29,7 @@ class info(commands.Cog):
         self.con = sqlite3.connect('database.db')
         self.cur = self.con.cursor()
         self.start_time = datetime.datetime.now()
+        self.color = Fluffy.color
     
     @commands.Cog.listener()
     async def on_ready(self):
@@ -60,7 +61,7 @@ class info(commands.Cog):
                         f"**Uptime:** {uptime_str}\n"
                         f"**Shards:** AutoSharded\n"
                         f"**CPU Usage:** {self.cpu_percent}%\n",
-            color=0x2b2d31
+            color=self.color
         )
         embed.set_author(name=ctx.author.name, icon_url=ctx.author.display_avatar.url)
         embed.set_thumbnail(url=ctx.author.display_avatar.url)
@@ -84,7 +85,7 @@ class info(commands.Cog):
         minutes, seconds = divmod(remainder, 60)
         days, hours = divmod(hours, 24)
         uptime_str = f"{days} day(s), {hours} hour(s), {minutes} minute(s), {seconds} second(s)"
-        embed = discord.Embed(description=f"Uptime: {uptime_str}",colour=0x2b2d31)
+        embed = discord.Embed(description=f"Uptime: {uptime_str}",colour=self.color)
         await ctx.reply(embed=embed, mention_author=False)
 
     @commands.command()
@@ -94,7 +95,7 @@ class info(commands.Cog):
         latency = round(self.client.latency * 1000)
 
         embed = discord.Embed(
-            color=0x2b2d31
+            color=self.color
         )
         embed.set_author(name=f"{latency}ms Pong! ", icon_url=ctx.author.display_avatar.url)
         embed.set_footer(text="Fluffy Services", icon_url=Fluffy.icon)
@@ -107,7 +108,7 @@ class info(commands.Cog):
         embed = discord.Embed(
             title="Fluffy Invite",
             description="**Invite me. Need Support?** \n **Join Support Server Using The Button Below -**",
-            color=0x2b2d31
+            color=self.color
         )
         await ctx.reply(embed=embed, mention_author=False, view=view)
 
@@ -119,7 +120,7 @@ class info(commands.Cog):
       embed = discord.Embed(
             title="Support",
             description=f"**Need Support?** \n **Join Support Server Using The Button Below -**",
-            color=0x2b2d31
+            color=self.color
       )
       await ctx.reply(embed=embed, mention_author=False, view=view)
 

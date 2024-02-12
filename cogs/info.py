@@ -41,7 +41,7 @@ class info(commands.Cog):
         guilds = ctx.bot.guilds
         num_guilds = len(guilds)
         num_users = sum(guild.member_count for guild in guilds)
-        num_commands = 70
+        num_commands = 45
 
         current_time = datetime.datetime.now()
         uptime = current_time - self.start_time

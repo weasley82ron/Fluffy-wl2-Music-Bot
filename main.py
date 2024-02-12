@@ -122,7 +122,7 @@ async def load():
 async def main():
   async with client:
     await load()
-    await client.start("MTIwNjI0NTA1MDkzNDEwNDEwNA.GOwDWi.dp3sDrQtKJYrHR0WX7eK6_zwzdPZjv9xvSwLUY")
+    await client.start("MTIwNjUzNzExOTQ3MjgxNjI0OQ.GnA75W.lVHq2s3HgFU01-D9VBdTu58hG0x1NAeRizKS5Y")
 
 
 #made by lulla

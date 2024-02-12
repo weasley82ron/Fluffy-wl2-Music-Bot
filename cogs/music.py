@@ -9,6 +9,7 @@ class music(commands.Cog):
     def __init__(self, client):
         self.client = client
         self.queuee = deque()
+        self.color = Fluffy.color
         
     @commands.Cog.listener()
     async def on_ready(self):
@@ -343,7 +344,7 @@ class music(commands.Cog):
         minutes, seconds = divmod(remainder, 60)
         duration_str = f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
         embed6 = discord.Embed(title= "Now Playing", color=self.color)
-        embed6.description=f"' [{vc.current.title}]({Fluffy.support_link})・[{duration_str}]({Fluffy.support_link})`'"
+        embed6.description=f"[{vc.current.title}]({Fluffy.support_link})・[{duration_str}]({Fluffy.support_link})"
         await ctx.reply(embed=embed6, mention_author=False)
         
     @commands.command()

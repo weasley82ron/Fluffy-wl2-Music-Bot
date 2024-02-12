@@ -1,6 +1,6 @@
 tick = "<:FluffyTick:1199677242767314974>"
 cross = "<:FluffyCross:1199677665674801273>"
-dot = "<a:Fluffy:1199687587732930650>"
+dot = "<a:Pink:1206515687372234782>"
 utility = "<:Fluffyutility:1199715303240773736>"
 music = "<:music:1199701598193074256>"
 antinuke = "<:Fluffyantinuke:1199714759788998807>"

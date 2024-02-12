@@ -30,7 +30,7 @@ class MenuView(discord.ui.View):
                 embed.set_author(name="Music Commands", icon_url=Fluffy.icon)
                 await interaction.response.edit_message(embed=embed, view=self)
             elif selected_values and "utility" in selected_values:
-                embed = discord.Embed(colour=Fluffy.color, description="`Avatar`, `Banner`, `MemberCount`")
+                embed = discord.Embed(colour=Fluffy.color, description="`Avatar`, `Banner`, `MemberCount`, `Afk`")
                 embed.set_author(name="Utility Commands", icon_url=Fluffy.icon)
                 await interaction.response.edit_message(embed=embed, view=self)                
             elif selected_values and "filter" in selected_values:

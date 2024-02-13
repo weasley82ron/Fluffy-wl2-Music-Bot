@@ -4,6 +4,7 @@ from collections import deque
 import re
 from discord.ext import commands
 import Fluffy
+from wavelink.ext import spotify
 
 class music(commands.Cog):
     def __init__(self, client):
@@ -34,8 +35,13 @@ class music(commands.Cog):
         url_pattern = r'(https?://\S+)'
         urls = re.findall(url_pattern, query)
         if urls:
-            embed4 = discord.Embed(description=f"Links are not supported.",colour=self.color)
-            await ctx.reply(embed=embed4, mention_author=False)
+            decoded = spotify.decode_url(query)
+
+            if decoded and decoded['type'] is spotify.SpotifySearchType.track:
+                track = await spotify.SpotifyTrack.search(query=decoded["id"], type=decoded["type"])
+                await vc.play(track)
+                vc.autoplay = True
+                vc.ctx = ctx
         else:
             tracks = await wavelink.YouTubeTrack.search(query)
             if tracks == []:

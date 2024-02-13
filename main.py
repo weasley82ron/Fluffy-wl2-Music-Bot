@@ -82,9 +82,9 @@ async def on_ready():
   client.owner_ids = [1177262245034606647, 1204853057742049370, 1120682121942552636]
   client.loop.create_task(node_connect())
   print(f"Connected as {client.user}")
-
-
-
+#Made By Billa
+#Made By Billa
+#Made By Billa
 @client.event
 async def node_connect():
   await client.wait_until_ready()
@@ -98,7 +98,7 @@ async def node_connect():
 @client.event
 async def on_wavelink_node_ready(node: wavelink.Node):
   print(f"Node {node.identifier} is ready")
-
+#Made By Billa
 #message event    x``
 @client.event
 async def on_message(message):
@@ -111,25 +111,25 @@ async def on_message(message):
     if cur.fetchone():
         return    
     await client.process_commands(message) 
-
-
-
+#Made By Billa
+#Made By Billa
+#Made By Billa
 async def load():
   for filename in os.listdir("./cogs"):
     if filename.endswith(".py"):
       await client.load_extension(f"cogs.{filename[:-3]}")
-
+#Made By Billa
 async def main():
   async with client:
     await load()
     await client.start("MTIwNjUzNzExOTQ3MjgxNjI0OQ.GnA75W.lVHq2s3HgFU01-D9VBdTu58hG0x1NAeRizKS5Y")
-
-
 #Made By Billa
-
-
-
-
-
-
+#Made By Billa
+#Made By Billa
+#Made By Billa
+#Made By Billa
+#Made By Billa
+#Made By Billa
+#Made By Billa
+#Made By Billa
 asyncio.run(main())

@@ -212,24 +212,24 @@ class music(commands.Cog):
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def skip(self, ctx: commands.Context):
         vc: wavelink.Player = ctx.voice_client
-        if not ctx.voice_client:
+        if not vc:
             embed = discord.Embed(description="I am not in any voice channel.", colour=self.color)
             return await ctx.reply(embed=embed, mention_author=False)      
-        elif not getattr(ctx.author.voice, "channel", None):
+        elif not ctx.author.voice:
             embed2 = discord.Embed(description="You are not in a voice channel.",colour=self.color)
             return await ctx.reply(embed=embed2, mention_author=False)        
         if ctx.author.voice.channel != ctx.voice_client.channel:
             embed3 = discord.Embed(description="You are not in the same voice channel.", colour=self.color)
             return await ctx.reply(embed=embed3, mention_author=False) 
-        if not vc or not vc.is_playing():
+        if not vc.is_playing():
             embed4 = discord.Embed(description="I am not playing anything.",colour=self.color)
             await ctx.reply(embed=embed4, mention_author=False)
             return        
         await vc.stop()
         embed5 = discord.Embed(description="Skipped the current song.",colour=self.color)
         await ctx.reply(embed=embed5, mention_author=False)
-        if list(vc.queue) != []:
-            track = vc.queue.get()
+        if vc.queue:
+            track = vc.queue.popleft()
             await vc.play(track)
             embed6 = discord.Embed(description=f"Started playing: [{track.title}]({Fluffy.support_link})",colour=self.color)
             await ctx.reply(embed=embed6, mention_author=False)

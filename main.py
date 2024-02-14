@@ -79,7 +79,7 @@ async def on_shard_ready(shard_id):
 @client.event                      
 async def on_ready():
   await client.load_extension("jishaku")
-  client.owner_ids = [1177262245034606647, 1204853057742049370, 1120682121942552636]
+  client.owner_ids = [1177262245034606647, 1204853057742049370, 1120682121942552636, 1193351155426787451]
   client.loop.create_task(node_connect())
   print(f"Connected as {client.user}")
 #Made By Theirry

@@ -72,6 +72,20 @@ class info(commands.Cog):
         embed.set_footer(text="Powered By Fluffy Services", icon_url=Fluffy.icon)
         await ctx.reply(embed=embed, mention_author=False, view=MyView(Fluffy.bot_link, Fluffy.support_link))
 
+    @commands.command(invoke_without_command=True,
+                help="Clears the messages",
+                usage="purge <amount>", aliases=['clean'])
+    @commands.has_guild_permissions(manage_messages=True)
+    async def purge(self, ctx, amount: int = 10):
+        if amount > 1000:
+            return await ctx.send(
+                "Purge limit exceeded. Please provide an integer which is less than or equal to 1000."
+            )
+        deleted = await ctx.channel.purge(limit=amount + 1)
+        return await ctx.send(
+            f"** Deleted {len(deleted)-1} message(s)**"
+        )
+
 
 
 

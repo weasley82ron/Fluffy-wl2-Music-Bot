@@ -38,7 +38,7 @@ class MenuView(discord.ui.View):
                 embed.set_author(name="Filter Commands", icon_url=Fluffy.icon)
                 await interaction.response.edit_message(embed=embed, view=self)
             elif selected_values and "info" in selected_values:
-                embed = discord.Embed(colour=Fluffy.color, description="`Ping`, `Uptime`, `Invite`, `Support`, `Stats`, `Setpreifx`, `Help`")
+                embed = discord.Embed(colour=Fluffy.color, description="`Ping`, `Purge`, `Uptime`, `Invite`, `Support`, `Stats`, `Setpreifx`, `Help`")
                 embed.set_author(name="Info Commands", icon_url=Fluffy.icon)
                 await interaction.response.edit_message(embed=embed, view=self)
             

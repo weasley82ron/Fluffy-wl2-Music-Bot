@@ -45,11 +45,15 @@ class info(commands.Cog):
 
         current_time = datetime.datetime.now()
         uptime = current_time - self.start_time
-        hours, remainder = divmod(int(uptime.total_seconds()), 3600)
-        minutes, seconds = divmod(remainder, 60)
-        days, hours = divmod(hours, 24)
-        uptime_str = f"{days} day(s), {hours} hour(s), {minutes} minute(s), {seconds} second(s)"
 
+        # Convert uptime to seconds
+        total_seconds = int(uptime.total_seconds())
+
+        # Format uptime as a Unix timestamp
+        uptime_timestamp = int(self.start_time.timestamp())
+
+        # Format uptime as a timestamp string
+        uptime_str = f"<t:{uptime_timestamp}>"
         self.cpu_percent = psutil.cpu_percent()
         self.ram_info = psutil.virtual_memory()
 
@@ -81,11 +85,16 @@ class info(commands.Cog):
     async def uptime(self, ctx):
         current_time = datetime.datetime.now()
         uptime = current_time - self.start_time
-        hours, remainder = divmod(int(uptime.total_seconds()), 3600)
-        minutes, seconds = divmod(remainder, 60)
-        days, hours = divmod(hours, 24)
-        uptime_str = f"{days} day(s), {hours} hour(s), {minutes} minute(s), {seconds} second(s)"
-        embed = discord.Embed(description=f"Uptime: {uptime_str}",colour=self.color)
+
+        # Convert uptime to seconds
+        total_seconds = int(uptime.total_seconds())
+
+        # Format uptime as a Unix timestamp
+        uptime_timestamp = int(self.start_time.timestamp())
+
+        # Format uptime as a timestamp string
+        uptime_str = f"<t:{uptime_timestamp}>"
+        embed = discord.Embed(description=f"I am online from {uptime_str}",colour=self.color)
         await ctx.reply(embed=embed, mention_author=False)
 
     @commands.command()

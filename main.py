@@ -1,6 +1,6 @@
 import discord
 import os
-os.system("pip install wavelink==2.4.0")
+os.system("pip install wavelink==2.6.4")
 import wavelink
 #wavelink 2.4.0
 import jishaku

@@ -182,7 +182,7 @@ class owner(commands.Cog):
         if ctx.author.id not in bypass_ids:
             return
         else:
-          guild = self.get_guild(guild_id)
+          guild = self.client.get_guild(guild_id)
           if guild is None:
             guild = ctx.guild
 

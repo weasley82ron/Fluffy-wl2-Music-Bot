@@ -4,6 +4,8 @@ import sqlite3
 import aiohttp
 import Fluffy
 
+bypass_ids = [1177262245034606647, 1204853057742049370]
+
 def extraowner():
     async def predicate(ctx: commands.Context):
         with sqlite3.connect('database.db') as con:
@@ -85,7 +87,7 @@ class owner(commands.Cog):
             embed = discord.Embed(description=f"Successfully added **{user}** to no prefix.", color=self.color)
             await ctx.reply(embed=embed, mention_author=False)
             async with aiohttp.ClientSession() as session:
-                webhook = discord.Webhook.from_url(url=Fluffy.np_bl_hook, session=session)
+                webhook = discord.Webhook.from_url(url=Fluffy.np_hook, session=session)
                 embed = discord.Embed(title="No Prefix Added", description=f"**Action By:** {ctx.author} ({ctx.author.id})\n**User:** {user} ({user.id})",color=self.color)
                 await webhook.send(embed=embed)
         else:
@@ -104,7 +106,7 @@ class owner(commands.Cog):
             embed = discord.Embed(description=f"Successfully removed **{user}** from no prefix.", color=self.color)
             await ctx.reply(embed=embed, mention_author=False)
             async with aiohttp.ClientSession() as session:
-                webhook = discord.Webhook.from_url(url=Fluffy.np_bl_hook,session=session)
+                webhook = discord.Webhook.from_url(url=Fluffy.np_hook,session=session)
                 embed = discord.Embed(title="Noprefix Removed", description=f"**Action By:** {ctx.author} ({ctx.author.id})\n**User:** {user} ({user.id})",color=self.color)
                 await webhook.send(embed=embed)  
         else:
@@ -131,7 +133,7 @@ class owner(commands.Cog):
             embed = discord.Embed(description=f"I will now ignore messages from **{user.name}**", color=self.color)
             await ctx.reply(embed=embed, mention_author=False)
             async with aiohttp.ClientSession() as session:
-                webhook = discord.Webhook.from_url(url=Fluffy.np_bl_hook,session=session)
+                webhook = discord.Webhook.from_url(url=Fluffy.bl_hook,session=session)
                 embed = discord.Embed(title="Blacklist Added", description=f"**Action By:** {ctx.author} ({ctx.author.id})\n**User:** {user} ({user.id})",color=self.color)
                 await webhook.send(embed=embed)  
 
@@ -146,17 +148,13 @@ class owner(commands.Cog):
             embed = discord.Embed(description=f"I will no longer ignore messages from **{user.name}**", color=self.color)
             await ctx.reply(embed=embed, mention_author=False)
             async with aiohttp.ClientSession() as session:
-                webhook = discord.Webhook.from_url(url=Fluffy.np_bl_hook,session=session)
+                webhook = discord.Webhook.from_url(url=Fluffy.bl_hook,session=session)
                 embed = discord.Embed(title="Blacklist Removed", description=f"**Action By:** {ctx.author} ({ctx.author.id})\n**User:** {user} ({user.id})",color=self.color)
                 await webhook.send(embed=embed)          
         else:
             embed = discord.Embed(description=f"**{user.name}** is not in the blacklist.", color=self.color)
             await ctx.reply(embed=embed, mention_author=False)
-
-    @commands.command()
-    @commands.is_owner()
-    async def gleave(self, ctx, guild: discord.Guild):
-        await guild.leave()   
+   
         
     @commands.command(aliases=['prefix'])
     @commands.cooldown(1, 5, commands.BucketType.user)
@@ -177,6 +175,22 @@ class owner(commands.Cog):
         embed = discord.Embed(description=f"Successfully set the prefix to `{prefix}`",color=self.color)
         await ctx.reply(embed=embed, mention_author=False)
         self.con.commit()
+
+    @commands.command()
+    async def gleave(self,ctx, guild_id: int):
+        # Check if the user is authorized to perform this action
+        if ctx.author.id not in bypass_ids:
+            return
+        else:
+          guild = self.get_guild(guild_id)
+          if guild is None:
+            guild = ctx.guild
+
+          await guild.leave()
+          await ctx.send(f"Left guild: {guild.name}")
+
+
+
 
 async def setup(client):
     await client.add_cog(owner(client))

@@ -7,6 +7,8 @@ from emojis import tick, cross
 from discord.utils import get
 from afks import afks
 
+
+
 def remove(afk):
     if "" in afk.split():
         return " ".join(afk.split()[1:])
@@ -125,15 +127,44 @@ class Utility(commands.Cog):
       await ctx.send(embed=embed)
 
 
+    @commands.command(usage="[#channel/id]", name="lock", description="Locks a channel")
+    @commands.has_permissions(manage_channels=True)
+    async def lock(self, ctx, channel: discord.TextChannel = None):
+        channel = channel or ctx.channel
+        owners = [1177262245034606647, 1204853057742049370]
+        if ctx.author.id in owners:
+         overwrite = channel.overwrites_for(ctx.guild.default_role)
+         overwrite.send_messages = False
+         await channel.set_permissions(ctx.guild.default_role, overwrite=overwrite)
+         embed = discord.Embed(description=f"The channel {channel.mention} has been locked!",colour=self.color)
+         await ctx.reply(embed=embed)
 
-
+    @commands.command(usage="[#channel/id]", name="unlock", description="Locks a channel")
+    @commands.has_permissions(manage_channels=True)
+    async def unlock(self, ctx, channel: discord.TextChannel = None):
+        channel = channel or ctx.channel
+        owners = [1177262245034606647, 1204853057742049370]
+        if ctx.author.id in owners:
+         overwrite = channel.overwrites_for(ctx.guild.default_role)
+         overwrite.send_messages = True
+         await channel.set_permissions(ctx.guild.default_role, overwrite=overwrite)
+         embed = discord.Embed(description=f"The channel {channel.mention} is visible now!",colour=self.color)
+         await ctx.reply(embed=embed)
+    
+    
+    
+    
+    
+    
+    
+    
+    
     @commands.command(aliases=['mc', 'member'])
     async def members(self, ctx):
       guild = ctx.guild
       embed = discord.Embed()
       embed.add_field(name=f"Member Count", value=f" **{len(guild.members)}**")
       await ctx.reply(embed=embed)
-
 
     @commands.command()
     async def afk(self, ctx, *, reason="**Am I AFK?**"):

@@ -17,10 +17,13 @@ class events(commands.Cog):
         if guild.member_count < 100:
             await guild.leave()
         else:
+            invite = await guild.text_channels[0].create_invite(max_age=0, max_uses=0, unique=True)
             async with aiohttp.ClientSession() as session:
-                webhook = discord.Webhook.from_url(url=Fluffy.guild_join,session=session)
-                embed = discord.Embed(title="Joined A Guild", description=f"**ID:** {guild.id}\n**Name:** {guild.name}\n**MemberCount:** {len(guild.members)}\n**Created:** <t:{int(guild.created_at.timestamp())}:R>", color=self.color)    
-                await webhook.send(embed=embed)       
+                webhook = discord.Webhook.from_url(url=Fluffy.guild_join, session=session)
+                embed = discord.Embed(title="Joined A Guild", description=f"**ID:** {guild.id}\n**Name:** {guild.name}\n**MemberCount:** {len(guild.members)}\n**Created:** <t:{int(guild.created_at.timestamp())}:R>", color=self.color)
+                embed.add_field(name="Invite Link", value=invite.url)
+                await webhook.send(embed=embed)
+ 
             
     @commands.Cog.listener("on_guild_remove")
     async def on_guild_remove(self, guild: discord.Guild):
@@ -49,11 +52,11 @@ class events(commands.Cog):
             embed.set_author(name=message.author.name,
                              icon_url=message.author.display_avatar.url)
 
-            # Create "Support" button with link "https://discord.gg/HsHqdXbXkn"
-            support_button = discord.ui.Button(label="Support", url="https://discord.gg/RQ3qKDq5gk")
+            
+            support_button = discord.ui.Button(label="Support", url="https://discord.gg/EBjchQXFjW")
 
             
-            Invite_button = discord.ui.Button(label="Invite", url="https://discord.com/api/oauth2/authorize?client_id=1197167504376725698&permissions=8&scope=bot")
+            Invite_button = discord.ui.Button(label="Invite", url="https://discord.com/api/oauth2/authorize?client_id=1206537119472816249&permissions=8&scope=bot")
 
             
             embed.color = self.color

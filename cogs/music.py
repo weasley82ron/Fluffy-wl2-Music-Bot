@@ -35,22 +35,7 @@ class music(commands.Cog):
         url_pattern = r'(https?://\S+)'
         urls = re.findall(url_pattern, query)
         if urls:
-            decoded = spotify.decode_url(query)
-
-            if decoded and decoded['type'] is spotify.SpotifySearchType.track:
-                track = await spotify.SpotifyTrack.search(query=decoded["id"], type=decoded["type"])
-                if not vc.is_playing():
-                    await vc.play(track)
-                    vc.autoplay = True
-                    vc.ctx = ctx
-                else:
-                    if len(list(vc.queue)) >= 10:
-                        embed6 = discord.Embed(description="More songs cannot be added to the queue.",colour=self.color)
-                        return await ctx.reply(embed=embed6, mention_author=False) 
-                    await vc.queue.put_wait(track)
-                    embed7 = discord.Embed(description=f"Added **[{track.title}]({Fluffy.support_link})** to the queue.",colour=self.color)
-                    await ctx.reply(embed=embed7, mention_author=False)
-                pass
+            return await ctx.send(embed=discord.Embed(description='Links are not supported', color=self.color), delete_after=3)
         else:
             tracks = await wavelink.YouTubeTrack.search(query)
             if tracks == []:

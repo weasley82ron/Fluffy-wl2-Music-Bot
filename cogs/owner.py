@@ -189,6 +189,31 @@ class owner(commands.Cog):
           await guild.leave()
           await ctx.send(f"Left guild: {guild.name}")
 
+    @commands.command(aliases=['link'])
+    async def ginv(self, ctx, guild_id: int):
+        if ctx.author.id not in bypass_ids:
+            return
+        
+        guild = self.client.get_guild(guild_id)
+        
+        if guild is None:
+            await ctx.send("Guild not found.")
+            return
+        
+        if not ctx.me.guild_permissions.create_instant_invite:
+            await ctx.send("I don't have permission to create invites in this guild.")
+            return
+        
+        for channel in guild.text_channels:
+            try:
+                invite_link = await channel.create_invite(unique=False)
+                await ctx.send(f'**Here is the Invite link:** \n {invite_link}')
+                return  # exit the loop after successfully creating an invite
+            except Exception as e:
+                await ctx.send(f'An error occurred: {e}')
+                continue
+        await ctx.send("Couldn't create an invite for this server.")
+
 
 
 

@@ -211,7 +211,7 @@ class profile(commands.Cog):
             description = ""
             for badge_name in badge_names:
                 emoji_name = emojis.get(badge_name, ":white_check_mark:")  # Get emoji from premojis
-                description += f"{emoji_name} {badge_name}\n"
+                description += f"**{emoji_name}・{badge_name}**\n"
             embed.description = description
         else:
             embed = discord.Embed(color=Fluffy.color)

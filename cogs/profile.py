@@ -80,7 +80,7 @@ class profile(commands.Cog):
         embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
         await ctx.send(embed=embed)
 
-    @badge.command()
+    @badge.command(aliases=['add'], help="Gives The Badge To A User", usage = "give <no.> <user>")
     async def give(self, ctx, badge_number: int=None, user: discord.User=None):
         if not badge_number:
             embed = discord.Embed(title="Error", color=Fluffy.color, description="Please provide a badge number.")
@@ -120,7 +120,7 @@ class profile(commands.Cog):
                 embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
                 await ctx.send(embed=embed)
 
-    @badge.command()
+    @badge.command(aliases=['rem'], help="Removes The Badge To A User", usage = "remove <no.> <user>")
     async def remove(self, ctx, badge_number: int=None, user: discord.User=None):
         if not badge_number:
             embed = discord.Embed(title="Error", color=Fluffy.color, description="Please provide a badge number.")
@@ -160,7 +160,7 @@ class profile(commands.Cog):
                 embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
                 await ctx.send(embed=embed)
 
-    @badge.command()
+    @badge.command(aliases=['all'], help="Gives All Badges To A User", usage = "giveall <user>")
     async def giveall(self, ctx, user: discord.User=None):
         if not user:
             user = ctx.author
@@ -175,7 +175,7 @@ class profile(commands.Cog):
             embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
             await ctx.send(embed=embed)
 
-    @badge.command()
+    @badge.command(aliases=['rall'], help="Removes All Badges From A User", usage = "removeall <user>")
     async def removeall(self, ctx, user: discord.User=None):
         if not user:
             user = ctx.author
@@ -197,7 +197,7 @@ class profile(commands.Cog):
                 embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
                 await ctx.send(embed=embed)
 
-    @commands.command(aliases=["pr"])
+    @commands.command(aliases=['pr'], help="Shows The Current Profile Of User", usage = "pr <user>")
     async def profile(self, ctx, user: discord.User=None):
         if not user:
             user = ctx.author

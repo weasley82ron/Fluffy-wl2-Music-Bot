@@ -67,7 +67,8 @@ async def setup_hook():
   cur.execute("CREATE TABLE IF NOT EXISTS Prefix(guild_id TEXT NOT NULL, prefix TEXT NOT NULL)")
   cur.execute("CREATE TABLE IF NOT EXISTS ignored_channels (guild_id INTEGER, channel_id INTEGER, PRIMARY KEY (guild_id, channel_id))")
   cur.execute("CREATE TABLE IF NOT EXISTS blacklist (user_id INTEGER PRIMARY KEY)")
-  cur.execute("CREATE TABLE IF NOT EXISTS Owner (user_id INTEGER PRIMARY KEY)") 
+  cur.execute("CREATE TABLE IF NOT EXISTS Owner (user_id INTEGER PRIMARY KEY)")
+  cur.execute("CREATE TABLE IF NOT EXISTS Profile (user_id INTEGER PRIMARY KEY)") 
   print("Table Initated")
 
 @client.event

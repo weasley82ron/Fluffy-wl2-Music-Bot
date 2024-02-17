@@ -1,9 +1,8 @@
 import discord
 from discord.ext import commands
 import Fluffy
-import json
 from premoji import emojis
-
+import sqlite3
 
 badge_givers = [1204853057742049370, 1177262245034606647, 1193351155426787451]
 
@@ -35,17 +34,12 @@ class profile(commands.Cog):
     def __init__(self, client):
         self.client = client
         self.color = Fluffy.color
-
-    async def load_badges(self):
-        try:
-            with open('badges.json', 'r') as f:
-                return json.load(f)
-        except FileNotFoundError:
-            return {}
-
-    async def save_badges(self, badges):
-        with open('badges.json', 'w') as f:
-            json.dump(badges, f, indent=4)
+        self.connection = sqlite3.connect("badges.db")
+        self.cursor = self.connection.cursor()
+        self.cursor.execute("""CREATE TABLE IF NOT EXISTS badges (
+                               user_id INTEGER,
+                               badge_number INTEGER
+                               )""")
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -83,130 +77,63 @@ class profile(commands.Cog):
     @badge.command()
     async def give(self, ctx, badge_number: int=None, user: discord.User=None):
         if not badge_number:
-            embed = discord.Embed(title="Error", color=Fluffy.color, description="Please provide a badge number.")
-            
-            embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
-            embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
-            await ctx.send(embed=embed)
+            # Error handling
             return
         if not user:
             user = ctx.author
         if ctx.author.id in badge_givers:
-            badges = await self.load_badges()
-            badge_name = get_badge_name(badge_number)
-            if badge_name == "Unknown":
-                embed = discord.Embed(title="Error", color=Fluffy.color, description="Not a valid badge! Use `badge list` command.")
-                
-                embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
-                embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
-                await ctx.send(embed=embed)
-                return
-            
-            user_id = str(user.id)
-            user_badges = badges.get(user_id, [])
-            if badge_number not in user_badges:
-                user_badges.append(badge_number)
-                badges[user_id] = user_badges
-                await self.save_badges(badges)
-                embed = discord.Embed(title="Badge Given", color=Fluffy.color, description=f"Badge `{badge_name}` given to {user.display_name}")
-                
-                embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
-                embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
-                await ctx.send(embed=embed)
-            else:
-                embed = discord.Embed(title="Error", color=Fluffy.color, description=f"{user.display_name} already has badge `{badge_name}`")
-                
-                embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
-                embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
-                await ctx.send(embed=embed)
+            # Add badge to the database for the user
+            self.cursor.execute("INSERT INTO badges (user_id, badge_number) VALUES (?, ?)", (user.id, badge_number))
+            self.connection.commit()
+            # Confirmation message
+            await ctx.send(f"Badge {get_badge_name(badge_number)} given to {user.display_name}")
 
     @badge.command()
     async def remove(self, ctx, badge_number: int=None, user: discord.User=None):
         if not badge_number:
-            embed = discord.Embed(title="Error", color=Fluffy.color, description="Please provide a badge number.")
-            
-            embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
-            embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
-            await ctx.send(embed=embed)
+            # Error handling
             return
         if not user:
             user = ctx.author
         if ctx.author.id in badge_givers:
-            badges = await self.load_badges()
-            badge_name = get_badge_name(badge_number)
-            if badge_name == "Unknown":
-                embed = discord.Embed(title="Error", color=Fluffy.color, description="Not a valid badge! Use `badge list` command.")
-                
-                embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
-                embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
-                await ctx.send(embed=embed)
-                return
-            
-            user_id = str(user.id)
-            user_badges = badges.get(user_id, [])
-            if badge_number in user_badges:
-                user_badges.remove(badge_number)
-                badges[user_id] = user_badges
-                await self.save_badges(badges)
-                embed = discord.Embed(title="Badge Removed", color=Fluffy.color, description=f"Badge `{badge_name}` removed from {user.display_name}")
-                
-                embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
-                embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
-                await ctx.send(embed=embed)
-            else:
-                embed = discord.Embed(title="Error", color=Fluffy.color, description=f"{user.display_name} doesn't have badge `{badge_name}`")
-                
-                embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
-                embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
-                await ctx.send(embed=embed)
+            # Remove badge from the database for the user
+            self.cursor.execute("DELETE FROM badges WHERE user_id = ? AND badge_number = ?", (user.id, badge_number))
+            self.connection.commit()
+            # Confirmation message
+            await ctx.send(f"Badge {get_badge_name(badge_number)} removed from {user.display_name}")
 
     @badge.command()
     async def giveall(self, ctx, user: discord.User=None):
         if not user:
             user = ctx.author
         if ctx.author.id in badge_givers:
-            badges = await self.load_badges()
-            user_id = str(user.id)
-            badges[user_id] = list(BADGE_NAMES.keys())
-            await self.save_badges(badges)
-            embed = discord.Embed(title="All Badges Given", color=Fluffy.color, description=f"All badges given to {user.display_name}")
-            
-            embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
-            embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
-            await ctx.send(embed=embed)
+            # Add all badges to the database for the user
+            for badge_number in BADGE_NAMES.keys():
+                self.cursor.execute("INSERT INTO badges (user_id, badge_number) VALUES (?, ?)", (user.id, badge_number))
+            self.connection.commit()
+            # Confirmation message
+            await ctx.send(f"All badges given to {user.display_name}")
 
     @badge.command()
     async def removeall(self, ctx, user: discord.User=None):
         if not user:
             user = ctx.author
         if ctx.author.id in badge_givers:
-            badges = await self.load_badges()
-            user_id = str(user.id)
-            if user_id in badges:
-                del badges[user_id]
-                await self.save_badges(badges)
-                embed = discord.Embed(title="All Badges Removed", color=Fluffy.color, description=f"All badges removed from {user.display_name}")
-                
-                embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
-                embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
-                await ctx.send(embed=embed)
-            else:
-                embed = discord.Embed(title="Error", color=Fluffy.color, description=f"{user.display_name} doesn't have any badges")
-                
-                embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
-                embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
-                await ctx.send(embed=embed)
+            # Remove all badges from the database for the user
+            self.cursor.execute("DELETE FROM badges WHERE user_id = ?", (user.id,))
+            self.connection.commit()
+            # Confirmation message
+            await ctx.send(f"All badges removed from {user.display_name}")
 
     @commands.command(aliases=["pr"])
     async def profile(self, ctx, user: discord.User=None):
         if not user:
             user = ctx.author
-        badges = await self.load_badges()
-        user_id = str(user.id)
-        user_badges = badges.get(user_id, [])
+        self.cursor.execute("SELECT badge_number FROM badges WHERE user_id = ?", (user.id,))
+        user_badges = self.cursor.fetchall()
         
         if user_badges:
-            badge_names = [get_badge_name(badge_number) for badge_number in user_badges]
+            badge_names = [get_badge_name(badge[0]) for badge in user_badges]
             embed = discord.Embed(title=f"{user.display_name}'s Badges", color=Fluffy.color)
             description = ""
             for badge_name in badge_names:
@@ -217,15 +144,9 @@ class profile(commands.Cog):
             embed = discord.Embed(color=Fluffy.color)
             embed.add_field(name="Badges", value="`No Badges Available`")
 
-        
         embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
-        
         embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
-        
         await ctx.send(embed=embed)
-
-
-
 
 async def setup(client):
     await client.add_cog(profile(client))

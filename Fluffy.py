@@ -6,4 +6,4 @@ icon="https://cdn.discordapp.com/attachments/1197078320794304532/120648865844271
 bot_link = "https://discord.com/api/oauth2/authorize?client_id=1206537119472816249&permissions=4348800321&scope=bot"
 support_link = "https://discord.gg/UrxJz6xfZT"
 color=0xeb8dc0
-bypass_ids=[1195047642774896640, 1177262245034606647]
+bypass_ids=[1204853057742049370, 1177262245034606647]

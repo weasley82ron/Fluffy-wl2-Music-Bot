@@ -81,13 +81,13 @@ class Help(commands.Cog):
             command = self.client.get_command(query)
             if command:
                 aliases = ", ".join(command.aliases)
-                bablu=discord.Embed(color=Fluffy.color, description=f"**{command.help}**")
-                bablu.add_field(name="Aliases", value=f"`{aliases}`", inline=False)
-                bablu.add_field(name="Usage", value=f"`{command.usage}`", inline=False)
-                bablu.set_author(name=ctx.author.name, icon_url=ctx.author.display_avatar.url)
-                bablu.set_thumbnail(url=ctx.author.display_avatar.url)
-                bablu.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
-                await ctx.send(embed=bablu)
+                ryze=discord.Embed(color=Fluffy.color, description=f"**{command.help}**")
+                ryze.add_field(name="Aliases", value=f"`{aliases}`", inline=False)
+                ryze.add_field(name="Usage", value=f"`{command.usage}`", inline=False)
+                ryze.set_author(name=ctx.author.name, icon_url=ctx.author.display_avatar.url)
+                ryze.set_thumbnail(url=ctx.author.display_avatar.url)
+                ryze.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
+                await ctx.send(embed=ryze)
                 return
             else:
                 await ctx.send("Command not found.")

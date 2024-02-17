@@ -76,7 +76,7 @@ class profile(commands.Cog):
 8 . Friends
 """)
         
-        embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
+        embed.set_thumbnail(url=ctx.author.display_avatar.url)
         embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
         await ctx.send(embed=embed)
 

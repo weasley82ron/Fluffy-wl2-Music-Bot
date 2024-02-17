@@ -60,7 +60,7 @@ class Help(commands.Cog):
 
     @commands.command(aliases=['h'])
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def help(self, ctx):
+    async def help(self, ctx, *, query=None):
         cur = self.con.cursor()
         cur.execute("SELECT prefix FROM Prefix WHERE guild_id = ?", (ctx.guild.id,))
         server_prefix = cur.fetchone()
@@ -71,6 +71,20 @@ class Help(commands.Cog):
         embed.set_author(name=ctx.author.name, icon_url=ctx.author.display_avatar.url)
         embed.set_thumbnail(url=ctx.author.display_avatar.url)
         embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
+        
+        if query:
+            command = self.client.get_command(query)
+            if command:
+                aliases = ", ".join(command.aliases)
+                ryze=discord.Embed(title=query, color=Fluffy.color, description=f"**{command.help}**")
+                ryze.add_field(name="Aliases", value=f"`{aliases}`", inline=False)
+                ryze.add_field(name="Usage", value=f"`{command.usage}`", inline=False)
+                await ctx.send(embed=ryze)
+                return
+            else:
+                await ctx.send("Command not found.")
+                return
+
         message = await ctx.reply(embed=embed, view=view, mention_author=False)
         try:
             await asyncio.sleep(view.timeout)
@@ -80,6 +94,7 @@ class Help(commands.Cog):
             for child in view.children:
                 child.disabled = True
             await message.edit(embed=embed, view=view)
+
 
 async def setup(client):
     await client.add_cog(Help(client))

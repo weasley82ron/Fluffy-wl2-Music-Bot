@@ -16,7 +16,7 @@ class music(commands.Cog):
     async def on_ready(self):
         print("Music Is Ready")
     
-    @commands.command(aliases=['p'])
+    @commands.command(aliases=['p'], help="Play Some Music!", usage = "play <query>")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def play(self, ctx, *, query):
         try:

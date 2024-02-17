@@ -67,7 +67,12 @@ class Help(commands.Cog):
         prefix = server_prefix[0] if server_prefix else "&"
         view = MenuView(ctx.author)
         embed = discord.Embed(colour=Fluffy.color, description=f"{dot} My prefix for this server is `{prefix}`\n{dot} Total Commands `45`\n{dot} [**Fluffy**]({Fluffy.bot_link}) | [**Support**]({Fluffy.support_link})\n{dot} Thanks for using Fluffy")
-        embed.add_field(name="__Commands__", value=f"**{music}`:`Music\n{utility}`:`Utility\n{filters}`:`Filters\n{info}`:`Info**")
+        
+        embed.add_field(name="Music", value='`Play`, `Pause`, `Resume`, `Stop`, `Queue`, `Volume`, `Skip`, `ClearQueue`, `DefaultVolume`, `Move`, `Join`, `Leave`, `NowPlaying`, `Forward`, `Rewind`, `Seek`, `Remove`', inline=False)
+        embed.add_field(name="Filters", value='`Vaporwave`, `Lofi`, `8d`, `Slowmo`, `BassBoost`, `China`, `Chipmunk`, `DarthVader`, `Demon`, `Funny`, `Karoke`, `NightCore`, `Pop`, `Soft`, `TrebleBass`, `Tremolo`, `Alien`, `Reset`', inline=False)
+        embed.add_field(name="Utility", value='`Avatar`, `Banner`, `MemberCount`, `Afk`', inline=False)
+        embed.add_field(name="Info", value='`Ping`, `Purge`, `Uptime`, `Invite`, `Support`, `Stats`, `Setpreifx`, `Help`', inline=False)
+        
         embed.set_author(name=ctx.author.name, icon_url=ctx.author.display_avatar.url)
         embed.set_thumbnail(url=ctx.author.display_avatar.url)
         embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
@@ -76,9 +81,12 @@ class Help(commands.Cog):
             command = self.client.get_command(query)
             if command:
                 aliases = ", ".join(command.aliases)
-                ryze=discord.Embed(title=query, color=Fluffy.color, description=f"**{command.help}**")
+                ryze=discord.Embed(color=Fluffy.color, description=f"**{command.help}**")
                 ryze.add_field(name="Aliases", value=f"`{aliases}`", inline=False)
                 ryze.add_field(name="Usage", value=f"`{command.usage}`", inline=False)
+                ryze.set_author(name=ctx.author.name, icon_url=ctx.author.display_avatar.url)
+                ryze.set_thumbnail(url=ctx.author.display_avatar.url)
+                ryze.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
                 await ctx.send(embed=ryze)
                 return
             else:

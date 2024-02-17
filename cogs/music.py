@@ -77,7 +77,7 @@ class music(commands.Cog):
         msg = await player.ctx.reply(embed=embed, mention_author=False)
         player.ctx.msg = msg
 
-    @commands.command(aliases=['ruk'])
+    @commands.command(aliases=['wait'], help="Pause The Playing Music!", usage = "pause")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def pause(self, ctx):
         if not ctx.voice_client:
@@ -98,7 +98,7 @@ class music(commands.Cog):
             embed5 = discord.Embed(description="Sucessfully Paused the player.",colour=self.color)
             await ctx.reply(embed=embed5, mention_author=False)
 
-    @commands.command(aliases=['chal'])
+    @commands.command(aliases=['begin'], help="Resume the Current Music!", usage = "resume")
     @commands.cooldown(1, 5, commands.BucketType.user)  
     async def resume(self, ctx):
         if not ctx.voice_client:
@@ -122,7 +122,7 @@ class music(commands.Cog):
             
 
 
-    @commands.command(aliases=['dc'])
+    @commands.command(aliases=['dc'], help="Stop The Music", usage = "stop")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def stop(self, ctx):
         if not ctx.voice_client:
@@ -143,7 +143,7 @@ class music(commands.Cog):
             embed4 = discord.Embed(description="Stopped and Disconnected :/ ",colour=self.color)
             await ctx.reply(embed=embed4, mention_author=False)
 
-    @commands.command(aliases=['q'])
+    @commands.command(aliases=['q'], help="Look Into The Queue", usage = "queue")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def queue(self, ctx):
         if not ctx.voice_client:
@@ -168,7 +168,7 @@ class music(commands.Cog):
         embed5 = discord.Embed(description=f'**__Now Playing__**\n  [{vc.current.title}]({Fluffy.support_link})・[{duration_str}]({Fluffy.support_link})\n\n```\n{track_list}```',color=self.color)
         await ctx.reply(embed=embed5, mention_author=False)
 
-    @commands.command(aliases=['vol'])
+    @commands.command(aliases=['vol'], help="Change The Volume", usage = "Volume")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def volume(self, ctx: commands.Context, volume: int):
         if not ctx.voice_client:
@@ -192,8 +192,7 @@ class music(commands.Cog):
         await vc.set_volume(volume)
         embed6 = discord.Embed(description=f"Volume set to {volume}%",colour=self.color)
         await ctx.reply(embed=embed6, mention_author=False) 
-
-    @commands.command(aliases=['s'])
+    @commands.command(aliases=['s'], help="Plays The Next Track", usage = "skip")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def skip(self, ctx: commands.Context):
         vc: wavelink.Player = ctx.voice_client
@@ -219,7 +218,7 @@ class music(commands.Cog):
             embed6 = discord.Embed(description=f"Started playing: [{track.title}]({Fluffy.support_link})",colour=self.color)
             await ctx.reply(embed=embed6, mention_author=False)
 
-    @commands.command(aliases=['cq'])
+    @commands.command(aliases=['cq'], help="Clears The Queue", usage = "clearqueue")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def clearqueue(self, ctx: commands.Context): 
         vc: wavelink.Player = ctx.voice_client
@@ -240,7 +239,7 @@ class music(commands.Cog):
         embed5 = discord.Embed(description="Successfully Cleared The Queue.",colour=self.color)
         await ctx.reply(embed=embed5, mention_author=False) 
 
-    @commands.command(aliases=['dvol'])
+    @commands.command(aliases=['dvol'], help="Shows The Default Volume", usage = "defaultvolume")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def defaultvolume(self, ctx: commands.Context):
         if not ctx.voice_client:
@@ -261,7 +260,7 @@ class music(commands.Cog):
         embed5 = discord.Embed(description="Default volume set to 100%", colour=self.color)
         await ctx.reply(embed=embed5, mention_author=False)        
 
-    @commands.command(aliases=['j'])
+    @commands.command(aliases=['j'], help="Joins The VC", usage = "join")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def join(self, ctx: commands.Context):
         if not getattr(ctx.author.voice, "channel", None):
@@ -279,7 +278,7 @@ class music(commands.Cog):
             embed4 = discord.Embed(description=f"Successfully Joined your voice channel" , colour=self.color)
             return await ctx.reply(embed=embed4, mention_author=False)      
             
-    @commands.command()
+    @commands.command(aliases=['shift'], help="Moves The Player To Your Channel", usage = "move")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def move(self, ctx: commands.Context):
         if not getattr(ctx.author.voice, "channel", None):
@@ -303,7 +302,7 @@ class music(commands.Cog):
             embed5 = discord.Embed(description="I am not in a voice channel.", colour=self.color)
             await ctx.reply(embed=embed5, mention_author=False)
 
-    @commands.command()
+    @commands.command(aliases=['quit'], help="Leaves The VC", usage = "leave")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def leave(self, ctx: commands.Context):
         if not getattr(ctx.author.voice, "channel", None):
@@ -319,7 +318,7 @@ class music(commands.Cog):
         embed4 = discord.Embed(description="Sucessfully Left voice channel.", colour=self.color)
         await ctx.reply(embed=embed4, mention_author=False)             
 
-    @commands.command(aliases=['nowp'])
+    @commands.command(aliases=['nowp'], help="Shows What's Playing", usage = "nowplaying")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def nowplaying(self, ctx):
         if ctx.voice_client is None:
@@ -347,7 +346,7 @@ class music(commands.Cog):
         embed6.description=f"[{vc.current.title}]({Fluffy.support_link})・[{duration_str}]({Fluffy.support_link})"
         await ctx.reply(embed=embed6, mention_author=False)
         
-    @commands.command()
+    @commands.command(aliases=['further'], help="Forward The Track ", usage = "forward")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def forward(self, ctx):
         vc: wavelink.Player = ctx.voice_client
@@ -371,7 +370,7 @@ class music(commands.Cog):
         embed6 = discord.Embed(description="Skipped the track by 10 seconds.", colour=self.color)
         await ctx.reply(embed=embed6, mention_author=False)
         
-    @commands.command()
+    @commands.command(aliases=['retreat'], help="Rewinds The Track", usage = "rewind")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def rewind(self, ctx):
         vc: wavelink.Player = ctx.voice_client
@@ -395,7 +394,7 @@ class music(commands.Cog):
         embed6 = discord.Embed(description="Rewound by 10 seconds.", colour=self.color)
         await ctx.reply(embed=embed6, mention_author=False)
         
-    @commands.command()
+    @commands.command(aliases=['look'], help="Seek Into The Track", usage = "seek <time>")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def seek(self, ctx, *, time_str):
         vc: wavelink.Player = ctx.voice_client      
@@ -427,7 +426,7 @@ class music(commands.Cog):
             embed7 = discord.Embed(description=f"Successfully sought to {time_str}.", colour=self.color)
             await ctx.reply(embed=embed7, mention_author=False)
             
-    @commands.command()
+    @commands.command(aliases=['detach'], help="Remove a Track From The Queue", usage = "remove <index>")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def remove(self, ctx, index: int):
         vc: wavelink.Player = ctx.voice_client

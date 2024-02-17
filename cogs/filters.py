@@ -87,92 +87,92 @@ class Filters(commands.Cog):
         embed6 = discord.Embed(description=f"All the filters have been reset.", color=self.color)
         await ctx.reply(embed=embed6, mention_author=False)
 
-    @commands.command()
+    @commands.command(aliases=['retro'], help="Music Like Retro", usage = "vaporwave")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def vaporwave(self, ctx: commands.Context):
         await self.apply_filter(ctx, 'vaporwave', wavelink.Filter(timescale=wavelink.Timescale(speed=0.7400040238419479, pitch=0.800000011920929, rate=1)))
 
-    @commands.command()  
+    @commands.command(aliases=['classic'], help="Classic Music", usage = "lofi")  
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def lofi(self, ctx: commands.Context):
         await self.apply_filter(ctx, 'lofi', wavelink.Filter(timescale=wavelink.Timescale(speed=0.7300040238419479, pitch=0.860050011920929, rate=1), equalizer=wavelink.Equalizer(bands=[(0, -0.25), (1, -0.25)])))
 
-    @commands.command(name="8d") 
+    @commands.command(name="8d", aliases=['Rotation'], help="Surrounder Effect", usage = "8d") 
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def _8d(self, ctx: commands.Context):
         await self.apply_filter(ctx, '8d', wavelink.Filter(rotation=wavelink.Rotation(speed=0.0859884000491)))
 
-    @commands.command()   
+    @commands.command(aliases=['slow'], help="Slowed Music", usage = "slowmo")   
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def slowmo(self, ctx: commands.Context):
         await self.apply_filter(ctx, 'slowmo', wavelink.Filter(timescale=wavelink.Timescale(speed=0.6800040238419479)))
 
-    @commands.command()
+    @commands.command(aliases=['bass'], help="Hear The Boosted Music", usage = "bassboost")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def bassboost(self, ctx: commands.Context):
         await self.apply_filter(ctx, 'bassboost', wavelink.Filter(equalizer=wavelink.Equalizer(bands=[(5.0, 1.0), (10.0, 0.5)])))
     
-    @commands.command()
+    @commands.command(aliases=['chin'], help="Music Like Retro", usage = "china")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def china(self, ctx: commands.Context):
         await self.apply_filter(ctx, 'china', wavelink.Filter(equalizer=wavelink.Equalizer(bands=[(15.0, 0.0)])))
 
-    @commands.command()
+    @commands.command(aliases=['chips'], help="Hear The Chip's Sound", usage = "chipmunk")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def chipmunk(self, ctx: commands.Context):
         await self.apply_filter(ctx, 'chipmunk', wavelink.Filter(timescale=wavelink.Timescale(speed=1.5)))
 
-    @commands.command()
+    @commands.command(aliases=['breather'], help="Hear To Breather", usage = "darthvader")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def darthvader(self, ctx: commands.Context):
         await self.apply_filter(ctx, 'darthvader', wavelink.Filter(timescale=wavelink.Timescale(speed=1.2, pitch=0.5)))
 
-    @commands.command()
+    @commands.command(aliases=['lucifer'], help="Hear To Demon", usage = "Devil")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def demon(self, ctx: commands.Context):
         await self.apply_filter(ctx, 'demon', wavelink.Filter(timescale=wavelink.Timescale(speed=0.8, pitch=0.5), equalizer=wavelink.Equalizer(bands=[(15.0, 0.0)])))
 
-    @commands.command()
+    @commands.command(aliases=['comd'], help="Unique Sounds", usage = "funny")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def funny(self, ctx: commands.Context):
         await self.apply_filter(ctx, 'funny', wavelink.Filter(timescale=wavelink.Timescale(speed=1.2, pitch=0.7)))
 
-    @commands.command()
+    @commands.command(aliases=['singsong'], help="Music Along A Recorded One", usage = "karaoke")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def karaoke(self, ctx: commands.Context):
         await self.apply_filter(ctx, 'karaoke', wavelink.Filter(timescale=wavelink.Timescale(speed=1.0, pitch=0.0)))
 
-    @commands.command()
+    @commands.command(aliases=['sped'], help="Hear The Sped-Up Music", usage = "nightcore")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def nightcore(self, ctx: commands.Context):
         await self.apply_filter(ctx, 'nightcore', wavelink.Filter(timescale=wavelink.Timescale(speed=1.5, pitch=1.5)))
 
-    @commands.command()
+    @commands.command(aliases=['bang'], help="Hip-Hop Music ", usage = "pop")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def pop(self, ctx: commands.Context):
         await self.apply_filter(ctx, 'pop', wavelink.Filter(equalizer=wavelink.Equalizer(bands=[(10.0, 0.5)])))
 
-    @commands.command()
+    @commands.command(aliases=['rfilters'], help="Removes All The Filters", usage = "reset")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def reset(self, ctx: commands.Context):
         await self.reset_filters(ctx, ['slowmo', 'lofi', 'vaporwave', '8d', 'bassboost', 'china', 'chipmunk', 'darthvader', 'demon', 'funny', 'karaoke', 'nightcore', 'pop', 'soft', 'treblebass', 'tremolo'])
 
-    @commands.command()
+    @commands.command(aliases=['mushy'], help="Hear The Soft Music", usage = "soft")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def soft(self, ctx: commands.Context):
         await self.apply_filter(ctx, 'soft', wavelink.Filter(equalizer=wavelink.Equalizer(bands=[(0.0, 0.0), (15.0, 1.0)])))
 
-    @commands.command()
+    @commands.command(aliases=['deep'], help="Hear The High-Pitched Music", usage = "treblebass")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def treblebass(self, ctx: commands.Context):
         await self.apply_filter(ctx, 'treblebass', wavelink.Filter(equalizer=wavelink.Equalizer(bands=[(0.0, 1.0), (15.0, -0.25)])))
     
-    @commands.command()
+    @commands.command(aliases=['tremble'], help="Hear The Trembling Music", usage = "tremolo")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def tremolo(self, ctx: commands.Context):
         await self.apply_filter(ctx, 'tremolo', wavelink.Filter(tremolo=wavelink.Tremolo(depth=0.5, frequency=4.0))) 
 
-    @commands.command()
+    @commands.command(aliases=['celestial'], help="Hear The Marshian Music", usage = "alien")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def alien(self, ctx: commands.Context):
         await self.apply_filter(ctx, 'alien', wavelink.Filter(vibrato=wavelink.Vibrato(frequency=10.0 ,depth=0.9)))    

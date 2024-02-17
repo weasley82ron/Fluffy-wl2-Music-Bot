@@ -76,7 +76,7 @@ class profile(commands.Cog):
 8 . Friends
 """)
         
-        embed.set_thumbnail(url=ctx.author.display_avatar.url)
+        embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
         embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
         await ctx.send(embed=embed)
 
@@ -85,7 +85,7 @@ class profile(commands.Cog):
         if not badge_number:
             embed = discord.Embed(title="Error", color=Fluffy.color, description="Please provide a badge number.")
             
-            embed.set_thumbnail(url=ctx.author.display_avatar.url)
+            embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
             embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
             await ctx.send(embed=embed)
             return
@@ -97,7 +97,7 @@ class profile(commands.Cog):
             if badge_name == "Unknown":
                 embed = discord.Embed(title="Error", color=Fluffy.color, description="Not a valid badge! Use `badge list` command.")
                 
-                embed.set_thumbnail(url=ctx.author.display_avatar.url)
+                embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
                 embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
                 await ctx.send(embed=embed)
                 return
@@ -110,13 +110,13 @@ class profile(commands.Cog):
                 await self.save_badges(badges)
                 embed = discord.Embed(title="Badge Given", color=Fluffy.color, description=f"Badge `{badge_name}` given to {user.display_name}")
                 
-                embed.set_thumbnail(url=ctx.author.display_avatar.url)
+                embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
                 embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
                 await ctx.send(embed=embed)
             else:
                 embed = discord.Embed(title="Error", color=Fluffy.color, description=f"{user.display_name} already has badge `{badge_name}`")
                 
-                embed.set_thumbnail(url=ctx.author.display_avatar.url)
+                embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
                 embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
                 await ctx.send(embed=embed)
 
@@ -125,7 +125,7 @@ class profile(commands.Cog):
         if not badge_number:
             embed = discord.Embed(title="Error", color=Fluffy.color, description="Please provide a badge number.")
             
-            embed.set_thumbnail(url=ctx.author.display_avatar.url)
+            embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
             embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
             await ctx.send(embed=embed)
             return
@@ -137,7 +137,7 @@ class profile(commands.Cog):
             if badge_name == "Unknown":
                 embed = discord.Embed(title="Error", color=Fluffy.color, description="Not a valid badge! Use `badge list` command.")
                 
-                embed.set_thumbnail(url=ctx.author.display_avatar.url)
+                embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
                 embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
                 await ctx.send(embed=embed)
                 return
@@ -150,13 +150,13 @@ class profile(commands.Cog):
                 await self.save_badges(badges)
                 embed = discord.Embed(title="Badge Removed", color=Fluffy.color, description=f"Badge `{badge_name}` removed from {user.display_name}")
                 
-                embed.set_thumbnail(url=ctx.author.display_avatar.url)
+                embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
                 embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
                 await ctx.send(embed=embed)
             else:
                 embed = discord.Embed(title="Error", color=Fluffy.color, description=f"{user.display_name} doesn't have badge `{badge_name}`")
                 
-                embed.set_thumbnail(url=ctx.author.display_avatar.url)
+                embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
                 embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
                 await ctx.send(embed=embed)
 
@@ -171,7 +171,7 @@ class profile(commands.Cog):
             await self.save_badges(badges)
             embed = discord.Embed(title="All Badges Given", color=Fluffy.color, description=f"All badges given to {user.display_name}")
             
-            embed.set_thumbnail(url=ctx.author.display_avatar.url)
+            embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
             embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
             await ctx.send(embed=embed)
 
@@ -187,13 +187,13 @@ class profile(commands.Cog):
                 await self.save_badges(badges)
                 embed = discord.Embed(title="All Badges Removed", color=Fluffy.color, description=f"All badges removed from {user.display_name}")
                 
-                embed.set_thumbnail(url=ctx.author.display_avatar.url)
+                embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
                 embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
                 await ctx.send(embed=embed)
             else:
                 embed = discord.Embed(title="Error", color=Fluffy.color, description=f"{user.display_name} doesn't have any badges")
                 
-                embed.set_thumbnail(url=ctx.author.display_avatar.url)
+                embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
                 embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
                 await ctx.send(embed=embed)
 
@@ -218,7 +218,7 @@ class profile(commands.Cog):
             embed.add_field(name="Badges", value="`No Badges Available`")
 
         
-        embed.set_thumbnail(url=ctx.author.display_avatar.url)
+        embed.set_thumbnail(url=user.display_avatar.url or ctx.author.display_avatar.url)
         
         embed.set_footer(text="By Fluffy Services", icon_url=Fluffy.icon)
         

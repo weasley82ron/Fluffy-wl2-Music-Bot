@@ -35,7 +35,7 @@ class info(commands.Cog):
     async def on_ready(self):
         print("Info Is Ready")   
     
-    @commands.command()
+    @commands.command(aliases=['bi'], help="Shows The Stats Of The Bot", usage = "stats")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def stats(self, ctx):
         guilds = ctx.bot.guilds
@@ -94,7 +94,7 @@ class info(commands.Cog):
 
 
 
-    @commands.command(aliases=['up'])
+    @commands.command(aliases=['up'], help="Check The Bot Uptime", usage = "uptime")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def uptime(self, ctx):
         current_time = datetime.datetime.now()
@@ -111,7 +111,7 @@ class info(commands.Cog):
         embed = discord.Embed(description=f"I am online from {uptime_str}",colour=self.color)
         await ctx.reply(embed=embed, mention_author=False)
 
-    @commands.command()
+    @commands.command(aliases=['latency'], help="See The Realtime Latency Of The Bot", usage = "ping")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def ping(self, ctx):
         # Get latency from the client object
@@ -124,7 +124,7 @@ class info(commands.Cog):
         embed.set_footer(text="Fluffy Services", icon_url=Fluffy.icon)
         await ctx.reply(embed=embed, mention_author=False)
 
-    @commands.command()
+    @commands.command(aliases=['inv'], help="Shows Bot's Links", usage = "invite")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def invite(self, ctx):
         view = MyView(Fluffy.bot_link, Fluffy.support_link)
@@ -136,7 +136,7 @@ class info(commands.Cog):
         await ctx.reply(embed=embed, mention_author=False, view=view)
 
   
-    @commands.command()
+    @commands.command(aliases=['sup'], help="Shows Bot's Links", usage = "support")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def support(self, ctx):
       view = MyView(Fluffy.bot_link, Fluffy.support_link)

@@ -25,7 +25,7 @@ class Utility(commands.Cog):
     async def on_ready(self):
         print("Utility Is Ready")  
 
-    @commands.command(name='avatar', aliases=['av'])
+    @commands.command(name='avatar', aliases=['av'], help="Shows The Pfp Of Mentioned User", usage = "avatar <User_Mention>")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def avatar(self, ctx, member: Optional[Union[discord.Member, discord.User]] = None):
      try:
@@ -55,7 +55,7 @@ class Utility(commands.Cog):
 
 
 
-    @commands.group(name="banner", invoke_without_command=True)
+    @commands.group(name="banner", invoke_without_command=True, aliases=['emblem'], help="Type &Banner", usage = "banner <user_mention>")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def banner(self, ctx):
       try:
@@ -159,14 +159,14 @@ class Utility(commands.Cog):
     
     
     
-    @commands.command(aliases=['mc', 'member'])
+    @commands.command(aliases=['mc', 'member'], help="Shows Total Number Of Members In Guild", usage = "members")
     async def members(self, ctx):
       guild = ctx.guild
       embed = discord.Embed()
       embed.add_field(name=f"Member Count", value=f" **{len(guild.members)}**")
       await ctx.reply(embed=embed)
 
-    @commands.command()
+    @commands.command(aliases=['lost'], help="Set A Offline Status", usage = "afk")
     async def afk(self, ctx, *, reason="**Am I AFK?**"):
         member = ctx.author
         if member.id in afks.keys():

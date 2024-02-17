@@ -69,7 +69,7 @@ class Help(commands.Cog):
         embed = discord.Embed(colour=Fluffy.color, description=f"{dot} My prefix for this server is `{prefix}`\n{dot} Total Commands `45`\n{dot} [**Fluffy**]({Fluffy.bot_link}) | [**Support**]({Fluffy.support_link})\n{dot} Thanks for using Fluffy")
         
         embed.add_field(name="Music", value='`Play`, `Pause`, `Resume`, `Stop`, `Queue`, `Volume`, `Skip`, `ClearQueue`, `DefaultVolume`, `Move`, `Join`, `Leave`, `NowPlaying`, `Forward`, `Rewind`, `Seek`, `Remove`', inline=False)
-        embed.add_field(name="Filters", value='`Vaporwave`, `Lofi`, `8d`, `Slowmo`, `BassBoost`, `China`, `Chipmunk`, `DarthVader`, `Demon`, `Funny`, `Karoke`, `NightCore`, `Pop`, `Soft`, `TrebleBass`, `Tremolo`, `Alien`, `Reset`', inline=False)
+        embed.add_field(name="Filters", value='`Vaporwave`, `Lofi`, `8d`, `Slowmo`, `BassBoost`, `China`, `Chipmunk`, `DarthVader`, `Demon`, `Funny`, `Karaoke`, `NightCore`, `Pop`, `Soft`, `TrebleBass`, `Tremolo`, `Alien`, `Reset`', inline=False)
         embed.add_field(name="Utility", value='`Avatar`, `Banner`, `MemberCount`, `Afk`', inline=False)
         embed.add_field(name="Info", value='`Ping`, `Purge`, `Uptime`, `Invite`, `Support`, `Stats`, `Setpreifx`, `Help`', inline=False)
         

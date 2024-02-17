@@ -51,7 +51,7 @@ class profile(commands.Cog):
     async def on_ready(self):
         print("Profile Is Ready")
 
-    @commands.group(invoke_without_command=True)
+    @commands.group(invoke_without_command=True, aliases=['bdg'])
     async def badge(self, ctx):
         embed = discord.Embed(title="Badges", color=Fluffy.color, description="""
 **give** - Gives The Badge To The User.

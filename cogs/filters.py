@@ -127,7 +127,7 @@ class Filters(commands.Cog):
     async def darthvader(self, ctx: commands.Context):
         await self.apply_filter(ctx, 'darthvader', wavelink.Filter(timescale=wavelink.Timescale(speed=1.2, pitch=0.5)))
 
-    @commands.command(aliases=['lucifer'], help="Hear To Demon", usage = "Devil")
+    @commands.command(aliases=['lucifer'], help="Hear To Demon", usage = "demon")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def demon(self, ctx: commands.Context):
         await self.apply_filter(ctx, 'demon', wavelink.Filter(timescale=wavelink.Timescale(speed=0.8, pitch=0.5), equalizer=wavelink.Equalizer(bands=[(15.0, 0.0)])))

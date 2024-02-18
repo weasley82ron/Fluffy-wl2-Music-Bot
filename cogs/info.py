@@ -35,7 +35,9 @@ class info(commands.Cog):
     async def on_ready(self):
         print("Info Is Ready")   
     
-    @commands.command(aliases=['bi'], help="Shows The Stats Of The Bot", usage = "stats")
+
+
+    @commands.command(aliases=['bi'], help="Shows The Stats Of The Bot", usage="stats")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def stats(self, ctx):
         guilds = ctx.bot.guilds
@@ -52,8 +54,9 @@ class info(commands.Cog):
         # Format uptime as a Unix timestamp
         uptime_timestamp = int(self.start_time.timestamp())
 
-        # Format uptime as a timestamp string
-        uptime_str = f"<t:{uptime_timestamp}>"
+        # Format uptime as a timestamp string with 'R' for relative time
+        uptime_str = f"<t:{uptime_timestamp}:R>"
+
         self.cpu_percent = psutil.cpu_percent()
         self.ram_info = psutil.virtual_memory()
 
@@ -88,13 +91,7 @@ class info(commands.Cog):
 
 
 
-
-
-
-
-
-
-    @commands.command(aliases=['up'], help="Check The Bot Uptime", usage = "uptime")
+    @commands.command(aliases=['up'], help="Check The Bot Uptime", usage="uptime")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def uptime(self, ctx):
         current_time = datetime.datetime.now()
@@ -106,9 +103,9 @@ class info(commands.Cog):
         # Format uptime as a Unix timestamp
         uptime_timestamp = int(self.start_time.timestamp())
 
-        # Format uptime as a timestamp string
-        uptime_str = f"<t:{uptime_timestamp}>"
-        embed = discord.Embed(description=f"I am online from {uptime_str}",colour=self.color)
+        # Format uptime as a timestamp string with 'R' for relative time
+        uptime_str = f"<t:{uptime_timestamp}:R>"
+        embed = discord.Embed(description=f"I am online from {uptime_str}", colour=self.color)
         await ctx.reply(embed=embed, mention_author=False)
 
     @commands.command(aliases=['latency'], help="See The Realtime Latency Of The Bot", usage = "ping")

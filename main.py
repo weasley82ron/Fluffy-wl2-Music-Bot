@@ -4,7 +4,7 @@ os.system("pip install wavelink==2.6.4")
 import wavelink
 #wavelink 2.4.0
 import jishaku
-from discord.ext import commands
+from discord.ext import commands, tasks
 from wavelink.ext import spotify
 import asyncio
 import sqlite3
@@ -82,6 +82,7 @@ async def on_ready():
   await client.load_extension("jishaku")
   client.owner_ids = [1177262245034606647, 1204853057742049370, 1120682121942552636, 1193351155426787451]
   client.loop.create_task(node_connect())
+  cache_sweeper.start()
   print(f"Connected as {client.user}")
 
 
@@ -114,7 +115,12 @@ async def on_message(message):
         return    
     await client.process_commands(message) 
 
-
+@tasks.loop(minutes=60)
+async def cache_sweeper():
+    client._connection._private_channels.clear()
+    client._connection._users.clear()
+    client._connection._messages.clear()
+    print("krdia")
 
 async def load():
   for filename in os.listdir("./cogs"):

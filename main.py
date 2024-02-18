@@ -120,7 +120,7 @@ async def cache_sweeper():
     client._connection._private_channels.clear()
     client._connection._users.clear()
     client._connection._messages.clear()
-    print("krdia")
+    print("Cleared Cache")
 
 async def load():
   for filename in os.listdir("./cogs"):

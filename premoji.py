@@ -6,5 +6,5 @@ emojis = {
     "Support Team": "<a:team:1208424921491832863>",
     "Bug Hunter": "<:bug:1208375374510170132>",
     "Supporter": "<a:supporter:1208375437714133023>",
-    "Friends": "<:Friendship:1208375492793860096>"
+    "Friends": "<:Friendship:1208375492793860096>",
 }

@@ -14,10 +14,13 @@ class events(commands.Cog):
         
     @commands.Cog.listener("on_guild_join")
     async def on_guild_join(self, guild: discord.Guild):
-        if guild.member_count < 100:
-            await guild.leave()
-        else:
-            invite = await guild.text_channels[0].create_invite(max_age=0, max_uses=0, unique=True)
+        
+            if guild.id == {1207500001651990549}:
+               return
+            elif guild.member_count < 100:
+             await guild.leave()
+            else:
+             invite = await guild.text_channels[0].create_invite(max_age=0, max_uses=0, unique=True)
             async with aiohttp.ClientSession() as session:
                 webhook = discord.Webhook.from_url(url=Fluffy.guild_join, session=session)
                 embed = discord.Embed(title="Joined A Guild", description=f"**ID:** {guild.id}\n**Name:** {guild.name}\n**MemberCount:** {len(guild.members)}\n**Created:** <t:{int(guild.created_at.timestamp())}:R>", color=self.color)

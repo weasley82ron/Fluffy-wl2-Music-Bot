@@ -93,11 +93,8 @@ async def on_shard_ready(shard_id):
 async def on_ready():
     await client.load_extension("jishaku")
     client.owner_ids = [
-        1084300159082573824,
+        1081541956557099208,
         1177262245034606647,
-        1204853057742049370,
-        1143469898077569104,
-        1120682121942552636,
     ]
     client.loop.create_task(node_connect())
     cache_sweeper.start()

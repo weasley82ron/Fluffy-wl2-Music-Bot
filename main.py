@@ -3,7 +3,6 @@ import os
 
 os.system("pip install wavelink==2.6.4")
 import wavelink
-os.system("pip install git+https://github.com/ItsBablu/FluffShaku.git")
 
 import jishaku
 from discord.ext import commands, tasks

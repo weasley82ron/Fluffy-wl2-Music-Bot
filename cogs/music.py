@@ -2,9 +2,9 @@ import discord
 import wavelink , asyncio
 from collections import deque
 import re
+from typing import cast
 from discord.ext import commands
 import Fluffy
-from wavelink.ext import spotify
 
 class music(commands.Cog):
     def __init__(self, client):
@@ -18,85 +18,100 @@ class music(commands.Cog):
     
     @commands.command(aliases=['p'], help="Play Some Music!", usage = "play <query>")
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def play(self, ctx, *, query):
-        try:
-          vc: wavelink.Player = await ctx.author.voice.channel.connect(cls=wavelink.Player, reconnect=True, self_deaf=True)
-        except:
-          vc: wavelink.Player = ctx.voice_client
-        if vc is None:
-           embed1 = discord.Embed(description="You are not in a voice channel.",colour=self.color)
-           return await ctx.reply(embed=embed1, mention_author=False)
-        if ctx.author.voice.channel != vc.channel: 
-            embed2 = discord.Embed(description="You are not in the same voice channel.", colour=self.color)
-            return await ctx.reply(embed=embed2, mention_author=False)
-        if vc.is_paused():
-            embed3 = discord.Embed(description="I am currently paused please use `&resume`.",colour=self.color)
-            return await ctx.reply(embed=embed3, mention_author=False)          
-        url_pattern = r'(https?://\S+)'
-        urls = re.findall(url_pattern, query)
-        if urls:
-            return await ctx.send(embed=discord.Embed(description='Links are not supported', color=self.color), delete_after=3)
+    async def play(self, ctx: commands.Context, *, query: str = None) -> None:
+        """Play a song with the given query."""
+        if query is None:
+            embedVar = discord.Embed(
+                title="Play Command Help",
+                description="The `?play` command allows you to play a song in the voice channel you're currently in. To use the command, type `?play` followed by the name of the song you want to play. For example, `?play Despacito`.",
+                color=discord.Color.blue()
+            )
+            await ctx.send(embed=embedVar)
+            return
+
+        if not ctx.guild:
+            return
+
+        player: wavelink.Player
+        player = cast(wavelink.Player, ctx.voice_client)  # type: ignore
+
+        if not player:
+            try:
+                player = await ctx.author.voice.channel.connect(cls=wavelink.Player)  # type: ignore
+            except AttributeError:
+                await ctx.send(
+                    "Please join a voice channel first before using this command."
+                )
+                return
+            except discord.ClientException:
+                await ctx.send(
+                    "I was unable to join this voice channel. Please try again."
+                )
+                return
+
+        player.autoplay = wavelink.AutoPlayMode.enabled
+
+        # Lock the player to this channel...
+        if not hasattr(player, "home"):
+            player.home = ctx.channel
+
+        tracks: wavelink.Search = await wavelink.Playable.search(query)
+        if not tracks:
+            await ctx.send(
+                f"{ctx.author.mention} - Could not find any tracks with that query. Please try again."
+            )
+            return
+
+        if isinstance(tracks, wavelink.Playlist):
+            # tracks is a playlist...
+            added: int = await player.queue.put_wait(tracks)
+            await ctx.send(
+                f"Added the playlist **`{tracks.name}`** ({added} songs) to the queue."
+            )
         else:
-            tracks = await wavelink.YouTubeTrack.search(query)
-            if tracks == []:
-                embed5 = discord.Embed(description=f'No songs were found with that query.',colour=self.color)
-                return await ctx.reply(embed=embed5, mention_author=False)
-            track_ = [track for track in tracks if track.length/1000 > 10]
-            track = track_[0] if track_ else None
-            if not vc.is_playing():
-                await vc.play(track)
-                vc.autoplay = True
-                vc.ctx = ctx
-            else:
-                if len(list(vc.queue)) >= 10:
-                    embed6 = discord.Embed(description="More songs cannot be added to the queue.",colour=self.color)
-                    return await ctx.reply(embed=embed6, mention_author=False) 
-                await vc.queue.put_wait(track)
-                embed7 = discord.Embed(description=f"Added **[{track.title}]({Fluffy.support_link})** to the queue.",colour=self.color)
-                await ctx.reply(embed=embed7, mention_author=False)
+            track: wavelink.Playable = tracks[0]
+            await player.queue.put_wait(track)
+            embedVar = discord.Embed(
+                title="Added to Queue",
+                description=f"**{track}** has been added to the queue. Enjoy your music!",
+                color=discord.Color.green()
+            )
+            await ctx.send(embed=embedVar)
 
-    @commands.Cog.listener('on_wavelink_track_end')
-    async def PlayerEnd(self, player_: wavelink.Player):
-        player = player_.player
-        try:
-            await player.ctx.msg.delete()
-        except: pass
-        try:
-            await player.msg.delete()
-        except: pass
+        if not player.playing:
+            # Play now since we aren't playing anything...
+            await player.play(player.queue.get(), volume=30)
+            embedVar = discord.Embed(
+                title="Now Playing",
+                description=f"Now playing: **{track}**. Enjoy your music!",
+                color=discord.Color.green()
+            )
+            await ctx.send(embed=embedVar)
 
-    @commands.Cog.listener('on_wavelink_track_start')
-    async def PlayerStart(self, payload: wavelink.TrackEventPayload) -> None:
-        player: wavelink.Player = payload.player
-        track = payload.track
-        length_seconds = round(track.length) / 1000
-        hours, remainder = divmod(length_seconds, 3600)
-        minutes, seconds = divmod(remainder, 60)
-        duration_str = f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
-        embed = discord.Embed(description=f"Started Playing [{track.title}]({Fluffy.support_link})・[{duration_str}]({Fluffy.support_link})", colour=self.color)
-        msg = await player.ctx.reply(embed=embed, mention_author=False)
-        player.ctx.msg = msg
+        # Optionally delete the invokers message...
+        try:
+            await ctx.message.delete()
+        except discord.HTTPException:
+            pass
 
     @commands.command(aliases=['wait'], help="Pause The Playing Music!", usage = "pause")
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def pause(self, ctx):
-        if not ctx.voice_client:
-            embed = discord.Embed(description="I am not in any vc.",colour=self.color)
-            return await ctx.reply(embed=embed, mention_author=False)
-        elif not getattr(ctx.author.voice, "channel", None):
-            embed2 = discord.Embed(description="You are not in a voice channel.",colour=self.color)
-            return await ctx.reply(embed=embed2, mention_author=False)
-        else:
-            vc: wavelink.Player = ctx.voice_client
-            if ctx.author.voice.channel != vc.channel:
-                embed3 = discord.Embed(description="You are not in the same voice channel.", colour=self.color)
-                return await ctx.reply(embed=embed3, mention_author=False)         
-            if not vc.is_playing():
-                embed4 = discord.Embed(description="I am not playing anything.",colour=self.color)
-                return await ctx.reply(embed=embed4, mention_author=False)  
-            await vc.pause()
-            embed5 = discord.Embed(description="Sucessfully Paused the player.",colour=self.color)
-            await ctx.reply(embed=embed5, mention_author=False)
+    async def pause(self, ctx: commands.Context) -> None:
+        """Pause or Resume the Player depending on its current state."""
+        player: wavelink.Player = cast(wavelink.Player, ctx.voice_client)
+        if not player:
+            return
+
+        # Toggle pause
+        await player.pause(not player.paused)
+
+        # Create an embed message
+        embedVar = discord.Embed(
+            title="Song Paused",
+            description=f"The Song is now {'paused' if player.paused else 'playing'}.",
+            color=discord.Color.blue()
+        )
+        await ctx.send(embed=embedVar)
 
     @commands.command(aliases=['begin'], help="Resume the Current Music!", usage = "resume")
     @commands.cooldown(1, 5, commands.BucketType.user)  
@@ -194,29 +209,25 @@ class music(commands.Cog):
         await ctx.reply(embed=embed6, mention_author=False) 
     @commands.command(aliases=['s'], help="Plays The Next Track", usage = "skip")
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def skip(self, ctx: commands.Context):
-        vc: wavelink.Player = ctx.voice_client
-        if not vc:
-            embed = discord.Embed(description="I am not in any voice channel.", colour=self.color)
-            return await ctx.reply(embed=embed, mention_author=False)      
-        elif not ctx.author.voice:
-            embed2 = discord.Embed(description="You are not in a voice channel.",colour=self.color)
-            return await ctx.reply(embed=embed2, mention_author=False)        
-        if ctx.author.voice.channel != ctx.voice_client.channel:
-            embed3 = discord.Embed(description="You are not in the same voice channel.", colour=self.color)
-            return await ctx.reply(embed=embed3, mention_author=False) 
-        if not vc.is_playing():
-            embed4 = discord.Embed(description="I am not playing anything.",colour=self.color)
-            await ctx.reply(embed=embed4, mention_author=False)
-            return        
-        await vc.stop()
-        embed5 = discord.Embed(description="Skipped the current song.",colour=self.color)
-        await ctx.reply(embed=embed5, mention_author=False)
-        if vc.queue:
-            track = vc.queue.popleft()
-            await vc.play(track)
-            embed6 = discord.Embed(description=f"Started playing: [{track.title}]({Fluffy.support_link})",colour=self.color)
-            await ctx.reply(embed=embed6, mention_author=False)
+    async def skip(self, ctx: commands.Context) -> None:
+        """Skip the current song."""
+        player: wavelink.Player = cast(wavelink.Player, ctx.voice_client)
+        if not player:
+            return
+
+        # Get the current track before skipping
+        current_track = player.current
+
+        await player.skip(force=True)
+        await ctx.message.add_reaction("\u2705")
+
+        # Create an embed message
+        embedVar = discord.Embed(
+            title="Song Skipped",
+            description=f"The song **{current_track}** has been skipped.",
+            color=discord.Color.red()
+        )
+        await ctx.send(embed=embedVar)
 
     @commands.command(aliases=['cq'], help="Clears The Queue", usage = "clearqueue")
     @commands.cooldown(1, 5, commands.BucketType.user)

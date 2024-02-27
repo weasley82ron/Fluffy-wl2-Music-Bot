@@ -1,12 +1,10 @@
 import discord
 import os
 
-os.system("pip install wavelink==2.6.4")
 import wavelink
 
 import jishaku
 from discord.ext import commands, tasks
-from wavelink.ext import spotify
 import asyncio
 import sqlite3
 import Fluffy
@@ -92,7 +90,7 @@ async def on_shard_ready(shard_id):
 async def on_ready():
     await client.load_extension("jishaku")
     client.owner_ids = [
-        1081541956557099208,
+        786926252811485186,
         1177262245034606647,
     ]
     client.loop.create_task(node_connect())
@@ -103,15 +101,8 @@ async def on_ready():
 @client.event
 async def node_connect():
     await client.wait_until_ready()
-    node: wavelink.Node = wavelink.Node(
-        uri="lavalink1.albinhakanson.se:1141", password="albinhakanson.se", secure=False
-    )
-    sc: spotify.SpotifyClient = spotify.SpotifyClient(
-        client_id="e7c9c292bbc24745b33743348e560d96",
-        client_secret="4726d6d6eba34cfe889c26844fcabc97",
-    )
-    await wavelink.NodePool.connect(client=client, nodes=[node], spotify=sc)
-
+    node = wavelink.Node(uri="http://n1.ll.darrennathanael.com:2269", password="glasshost1984")
+    await wavelink.Pool.connect(client=client, nodes=[node])
 
 @client.event
 async def on_wavelink_node_ready(node: wavelink.Node):
@@ -151,7 +142,7 @@ async def main():
     async with client:
         await load()
         await client.start(
-            "MTIwNjUzNzExOTQ3MjgxNjI0OQ.GnA75W.lVHq2s3HgFU01-D9VBdTu58hG0x1NAeRizKS5Y"
+            "MTE5NzE2NzUwNDM3NjcyNTY5OA.GRtxFE.lOOP_TZ0PyEgqBwiTIRP1UUgxklMoHGClUK9I4"
         )
 
 

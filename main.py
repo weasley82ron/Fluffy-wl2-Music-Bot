@@ -50,6 +50,7 @@ class Fluffy(commands.AutoShardedBot):
             case_insensitive=True,
             strip_after_prefix=True,
         )
+
     async def setup_hook(self) -> None:
         nodes = [wavelink.Node(uri="http://127.0.0.1:2333", password="youshallnotpass")]
         cur.execute("CREATE TABLE IF NOT EXISTS Np(users)")
@@ -59,7 +60,9 @@ class Fluffy(commands.AutoShardedBot):
         cur.execute(
             "CREATE TABLE IF NOT EXISTS ignored_channels (guild_id INTEGER, channel_id INTEGER, PRIMARY KEY (guild_id, channel_id))"
         )
-        cur.execute("CREATE TABLE IF NOT EXISTS blacklist (user_id INTEGER PRIMARY KEY)")
+        cur.execute(
+            "CREATE TABLE IF NOT EXISTS blacklist (user_id INTEGER PRIMARY KEY)"
+        )
         cur.execute("CREATE TABLE IF NOT EXISTS Owner (user_id INTEGER PRIMARY KEY)")
         cur.execute("CREATE TABLE IF NOT EXISTS Profile (user_id INTEGER PRIMARY KEY)")
         print("Table Initated")
@@ -98,7 +101,6 @@ class Fluffy(commands.AutoShardedBot):
         await player.home.send(embed=embed)
 
 
-
 client = Fluffy()
 shard_guild_counts = {}
 
@@ -113,7 +115,6 @@ async def on_connect():
 
 # @client.event
 # async def setup_hook():
-    
 
 
 @client.event

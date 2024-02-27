@@ -1,12 +1,11 @@
 import discord
 from discord.ext import commands
-import os 
+import os
 import Fluffy
 from typing import Optional, Union
 from emojis import tick, cross
 from discord.utils import get
 from afks import afks
-
 
 
 def remove(afk):
@@ -15,117 +14,157 @@ def remove(afk):
     else:
         return afk
 
+
 class Utility(commands.Cog):
     def __init__(self, client):
         self.client = client
         self.color = Fluffy.color
 
-        
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Utility Is Ready")  
+        print("Utility Is Ready")
 
-    @commands.command(name='avatar', aliases=['av'], help="Shows The Pfp Of Mentioned User", usage = "avatar <User_Mention>")
-    @commands.cooldown(1, 5, commands.BucketType.user)
-    async def avatar(self, ctx, member: Optional[Union[discord.Member, discord.User]] = None):
-     try:
-      if member is None or member == "":
-        member = ctx.author
-      user = await self.client.fetch_user(member.id)
-      webp = user.avatar.replace(format='webp')
-      jpg = user.avatar.replace(format='jpg')
-      png = user.avatar.replace(format='png')
-      embed = discord.Embed(
-        color=self.color,
-        description=f"[`PNG`]({png}) | [`JPG`]({jpg}) | [`WEBP`]({webp})"
-        if not user.avatar.is_animated()
-        else f"[`PNG`]({png}) | [`JPG`]({jpg}) | [`WEBP`]({webp}) | [`GIF`]({user.avatar.replace(format='gif')})"
+    @commands.command(
+        name="avatar",
+        aliases=["av"],
+        help="Shows The Pfp Of Mentioned User",
+        usage="avatar <User_Mention>",
     )
-      embed.set_author(name=f"{member}",
-                     icon_url=member.avatar.url
-                     if member.avatar else member.default_avatar.url)
-      embed.set_image(url=user.avatar.url)
-      embed.set_footer(text=f"Requested By {ctx.author}",
-                     icon_url=ctx.author.avatar.url
-                     if ctx.author.avatar else ctx.author.default_avatar.url)
+    @commands.cooldown(1, 5, commands.BucketType.user)
+    async def avatar(
+        self, ctx, member: Optional[Union[discord.Member, discord.User]] = None
+    ):
+        try:
+            if member is None or member == "":
+                member = ctx.author
+            user = await self.client.fetch_user(member.id)
+            webp = user.avatar.replace(format="webp")
+            jpg = user.avatar.replace(format="jpg")
+            png = user.avatar.replace(format="png")
+            embed = discord.Embed(
+                color=self.color,
+                description=(
+                    f"[`PNG`]({png}) | [`JPG`]({jpg}) | [`WEBP`]({webp})"
+                    if not user.avatar.is_animated()
+                    else f"[`PNG`]({png}) | [`JPG`]({jpg}) | [`WEBP`]({webp}) | [`GIF`]({user.avatar.replace(format='gif')})"
+                ),
+            )
+            embed.set_author(
+                name=f"{member}",
+                icon_url=(
+                    member.avatar.url if member.avatar else member.default_avatar.url
+                ),
+            )
+            embed.set_image(url=user.avatar.url)
+            embed.set_footer(
+                text=f"Requested By {ctx.author}",
+                icon_url=(
+                    ctx.author.avatar.url
+                    if ctx.author.avatar
+                    else ctx.author.default_avatar.url
+                ),
+            )
 
-      await ctx.send(embed=embed)
-     except Exception as e:
-       await ctx.send(e)
+            await ctx.send(embed=embed)
+        except Exception as e:
+            await ctx.send(e)
 
-
-
-    @commands.group(name="banner", invoke_without_command=True, aliases=['emblem'], help="Type &Banner", usage = "banner <user_mention>")
+    @commands.group(
+        name="banner",
+        invoke_without_command=True,
+        aliases=["emblem"],
+        help="Type &Banner",
+        usage="banner <user_mention>",
+    )
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def banner(self, ctx):
-      try:
-        embed = discord.Embed(title="Banner", color=self.color)
-        embed.description = """
+        try:
+            embed = discord.Embed(title="Banner", color=self.color)
+            embed.description = """
 `banner user` - **Shows The Banner Of Mentioned User.**\n
 `banner server` - **Shows The Banner Of The Server.**
-"""  
-        await ctx.send(embed=embed)
-      except Exception as e:
-         print(e)
+"""
+            await ctx.send(embed=embed)
+        except Exception as e:
+            print(e)
 
     @banner.command(name="server")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def server(self, ctx):
-     if not ctx.guild.banner:
-      await ctx.reply(f"**{cross} | This server does not have a banner.**")
-     else:
-      webp = ctx.guild.banner.replace(format='webp')
-      jpg = ctx.guild.banner.replace(format='jpg')
-      png = ctx.guild.banner.replace(format='png')
-      embed = discord.Embed(
-        color=self.color,
-        description=f"[`PNG`]({png}) | [`JPG`]({jpg}) | [`WEBP`]({webp})"
-        if not ctx.guild.banner.is_animated() else
-        f"[`PNG`]({png}) | [`JPG`]({jpg}) | [`WEBP`]({webp}) | [`GIF`]({ctx.guild.banner.replace(format='gif')})"
-      )
-      embed.set_image(url=ctx.guild.banner)
-      embed.set_author(name=ctx.guild.name,
-                       icon_url=ctx.guild.icon.url
-                       if ctx.guild.icon else ctx.guild.default_icon.url)
-      embed.set_footer(text=f"Requested By {ctx.author}",
-                       icon_url=ctx.author.avatar.url
-                       if ctx.author.avatar else ctx.author.default_avatar.url)
-      await ctx.reply(embed=embed)
-
+        if not ctx.guild.banner:
+            await ctx.reply(f"**{cross} | This server does not have a banner.**")
+        else:
+            webp = ctx.guild.banner.replace(format="webp")
+            jpg = ctx.guild.banner.replace(format="jpg")
+            png = ctx.guild.banner.replace(format="png")
+            embed = discord.Embed(
+                color=self.color,
+                description=(
+                    f"[`PNG`]({png}) | [`JPG`]({jpg}) | [`WEBP`]({webp})"
+                    if not ctx.guild.banner.is_animated()
+                    else f"[`PNG`]({png}) | [`JPG`]({jpg}) | [`WEBP`]({webp}) | [`GIF`]({ctx.guild.banner.replace(format='gif')})"
+                ),
+            )
+            embed.set_image(url=ctx.guild.banner)
+            embed.set_author(
+                name=ctx.guild.name,
+                icon_url=(
+                    ctx.guild.icon.url if ctx.guild.icon else ctx.guild.default_icon.url
+                ),
+            )
+            embed.set_footer(
+                text=f"Requested By {ctx.author}",
+                icon_url=(
+                    ctx.author.avatar.url
+                    if ctx.author.avatar
+                    else ctx.author.default_avatar.url
+                ),
+            )
+            await ctx.reply(embed=embed)
 
     @banner.command(name="user")
     @commands.cooldown(1, 2, commands.BucketType.user)
     @commands.max_concurrency(1, per=commands.BucketType.default, wait=False)
     @commands.guild_only()
-    async def _user(self,
-                  ctx,
-                  member: Optional[Union[discord.Member,
-                                         discord.User]] = None):
-     if member == None or member == "":
-      member = ctx.author
-     bannerUser = await self.client.fetch_user(member.id)
-     if not bannerUser.banner:
-      await ctx.reply("{} **|** {} **does not have a banner.**".format(cross, member))
-     else:
-      webp = bannerUser.banner.replace(format='webp')
-      jpg = bannerUser.banner.replace(format='jpg')
-      png = bannerUser.banner.replace(format='png')
-      embed = discord.Embed(
-        color=self.color,
-        description=f"[`PNG`]({png}) | [`JPG`]({jpg}) | [`WEBP`]({webp})"
-        if not bannerUser.banner.is_animated() else
-        f"[`PNG`]({png}) | [`JPG`]({jpg}) | [`WEBP`]({webp}) | [`GIF`]({bannerUser.banner.replace(format='gif')})"
-      )
-      embed.set_author(name=f"{member}",
-                       icon_url=member.avatar.url
-                       if member.avatar else member.default_avatar.url)
-      embed.set_image(url=bannerUser.banner)
-      embed.set_footer(text=f"Requested By {ctx.author}",
-                       icon_url=ctx.author.avatar.url
-                       if ctx.author.avatar else ctx.author.default_avatar.url)
+    async def _user(
+        self, ctx, member: Optional[Union[discord.Member, discord.User]] = None
+    ):
+        if member == None or member == "":
+            member = ctx.author
+        bannerUser = await self.client.fetch_user(member.id)
+        if not bannerUser.banner:
+            await ctx.reply(
+                "{} **|** {} **does not have a banner.**".format(cross, member)
+            )
+        else:
+            webp = bannerUser.banner.replace(format="webp")
+            jpg = bannerUser.banner.replace(format="jpg")
+            png = bannerUser.banner.replace(format="png")
+            embed = discord.Embed(
+                color=self.color,
+                description=(
+                    f"[`PNG`]({png}) | [`JPG`]({jpg}) | [`WEBP`]({webp})"
+                    if not bannerUser.banner.is_animated()
+                    else f"[`PNG`]({png}) | [`JPG`]({jpg}) | [`WEBP`]({webp}) | [`GIF`]({bannerUser.banner.replace(format='gif')})"
+                ),
+            )
+            embed.set_author(
+                name=f"{member}",
+                icon_url=(
+                    member.avatar.url if member.avatar else member.default_avatar.url
+                ),
+            )
+            embed.set_image(url=bannerUser.banner)
+            embed.set_footer(
+                text=f"Requested By {ctx.author}",
+                icon_url=(
+                    ctx.author.avatar.url
+                    if ctx.author.avatar
+                    else ctx.author.default_avatar.url
+                ),
+            )
 
-      await ctx.send(embed=embed)
-
+            await ctx.send(embed=embed)
 
     @commands.command(usage="[#channel/id]", name="lock", description="Locks a channel")
     @commands.has_permissions(manage_channels=True)
@@ -133,70 +172,89 @@ class Utility(commands.Cog):
         channel = channel or ctx.channel
         owners = [1177262245034606647, 1204853057742049370]
         if ctx.author.id in owners:
-         overwrite = channel.overwrites_for(ctx.guild.default_role)
-         overwrite.send_messages = False
-         await channel.set_permissions(ctx.guild.default_role, overwrite=overwrite)
-         embed = discord.Embed(description=f"The channel {channel.mention} has been locked!",colour=self.color)
-         await ctx.reply(embed=embed)
+            overwrite = channel.overwrites_for(ctx.guild.default_role)
+            overwrite.send_messages = False
+            await channel.set_permissions(ctx.guild.default_role, overwrite=overwrite)
+            embed = discord.Embed(
+                description=f"The channel {channel.mention} has been locked!",
+                colour=self.color,
+            )
+            await ctx.reply(embed=embed)
 
-    @commands.command(usage="[#channel/id]", name="unlock", description="Locks a channel")
+    @commands.command(
+        usage="[#channel/id]", name="unlock", description="Locks a channel"
+    )
     @commands.has_permissions(manage_channels=True)
     async def unlock(self, ctx, channel: discord.TextChannel = None):
         channel = channel or ctx.channel
         owners = [1177262245034606647, 1204853057742049370]
         if ctx.author.id in owners:
-         overwrite = channel.overwrites_for(ctx.guild.default_role)
-         overwrite.send_messages = True
-         await channel.set_permissions(ctx.guild.default_role, overwrite=overwrite)
-         embed = discord.Embed(description=f"The channel {channel.mention} is visible now!",colour=self.color)
-         await ctx.reply(embed=embed)
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    @commands.command(aliases=['mc', 'member'], help="Shows Total Number Of Members In Guild", usage = "members")
-    async def members(self, ctx):
-      guild = ctx.guild
-      embed = discord.Embed()
-      embed.add_field(name=f"Member Count", value=f" **{len(guild.members)}**")
-      await ctx.reply(embed=embed)
+            overwrite = channel.overwrites_for(ctx.guild.default_role)
+            overwrite.send_messages = True
+            await channel.set_permissions(ctx.guild.default_role, overwrite=overwrite)
+            embed = discord.Embed(
+                description=f"The channel {channel.mention} is visible now!",
+                colour=self.color,
+            )
+            await ctx.reply(embed=embed)
 
-    @commands.command(aliases=['lost'], help="Set A Offline Status", usage = "afk")
+    @commands.command(
+        aliases=["mc", "member"],
+        help="Shows Total Number Of Members In Guild",
+        usage="members",
+    )
+    async def members(self, ctx):
+        guild = ctx.guild
+        embed = discord.Embed()
+        embed.add_field(name=f"Member Count", value=f" **{len(guild.members)}**")
+        await ctx.reply(embed=embed)
+
+    @commands.command(aliases=["lost"], help="Set A Offline Status", usage="afk")
     async def afk(self, ctx, *, reason="**Am I AFK?**"):
         member = ctx.author
         if member.id in afks.keys():
             afks.pop(member.id)
         else:
             try:
-                await member.edit(nick = f" {member.display_name}")
+                await member.edit(nick=f" {member.display_name}")
             except:
                 pass
         try:
-         afks[member.id] = reason
+            afks[member.id] = reason
         except Exception as e:
             await ctx.send(e)
-        await ctx.send(embed=discord.Embed(description=f"Your AFK is now set to: **{reason}**", color=self.color))
- 
+        await ctx.send(
+            embed=discord.Embed(
+                description=f"Your AFK is now set to: **{reason}**", color=self.color
+            )
+        )
+
     @commands.Cog.listener()
     async def on_message(self, message):
-            if message.author.id in afks.keys():
-                    afks.pop(message.author.id)
-                    await message.channel.send(embed=discord.Embed(description=f"{message.author.mention}, I removed your AFK. ", color=self.color))
-                    return
-            for id, reason in afks.items():
-                        member = get(message.guild.members, id = id)
-                        if (message.reference and member == (await message.channel.fetch_message(message.reference.message_id)).author) or member.id in message.raw_mentions:
-                                       await message.reply(embed=discord.Embed(description=f"**{member.mention}** is AFK: {reason}", color=self.color))
-       
-
-
-       
-
+        if message.author.id in afks.keys():
+            afks.pop(message.author.id)
+            await message.channel.send(
+                embed=discord.Embed(
+                    description=f"{message.author.mention}, I removed your AFK. ",
+                    color=self.color,
+                )
+            )
+            return
+        for id, reason in afks.items():
+            member = get(message.guild.members, id=id)
+            if (
+                message.reference
+                and member
+                == (
+                    await message.channel.fetch_message(message.reference.message_id)
+                ).author
+            ) or member.id in message.raw_mentions:
+                await message.reply(
+                    embed=discord.Embed(
+                        description=f"**{member.mention}** is AFK: {reason}",
+                        color=self.color,
+                    )
+                )
 
 
 async def setup(client):

@@ -3,7 +3,7 @@ import wavelink , asyncio
 from collections import deque
 import re
 from discord.ext import commands
-import Fluffy from
+import Fluffy
 from wavelink.ext import spotify
 
 class music(commands.Cog):
